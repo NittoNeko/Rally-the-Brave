@@ -2,7 +2,9 @@
 
 ## Overview
 
-Rally the Brave is a 2D roguelike game developed with Unity and written in c#, where players travel between randomly generated levels, discover new contents and collect fantastic items, skills and souls to defeat challenging foes.
+Rally the Brave is a 2D roguelike game developed with Unity and written in c#, 
+where players travel between randomly generated levels, discover new contents 
+and collect fantastic items, skills and souls to defeat challenging foes.
 
 Rally the Brave is a 2D roguelike game developed personally by Yajie Hao using Unity engine.
     
@@ -14,10 +16,12 @@ the world becomes more challenging. In the same time, players empower themselves
 and cursed but awesome souls to face their indefinite fate.
 
 ## Manual
-Click <a href="#Manual">here</a>.
+
+Click <a href="Doucmentation/technical_highlights.md">here</a>.
 
 ## Technical Highlights
-Click <a href="#Technical Highlights">here</a>.
+
+Click <a href="Doucmentation/manual.md">here</a>.
 
 ## Notice
 

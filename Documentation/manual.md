@@ -1,5 +1,5 @@
-<a id="Manual"></a>
 ## Character Attributes
+
 Players empower themselves through better items, skills and souls, in order to defeat stronger and stronger foes.
 Attributes include:
 1.  Health: When players’ health reaches zero, game is over.
@@ -17,6 +17,7 @@ Attributes include:
 13. Movement: How fast players can move.
 
 ## Equipment
+
 Equipment is used to increase players’ attributes, and sometimes it can bring special effects to players.
 Equipment includes:
 1.  Weapon: Decides Attack, Haste, Critical Chance, Critical Multiple and Focus
@@ -38,28 +39,32 @@ Skills include:
 3.	Aura: This kind of skills lasts for a period and drains mana during that time.
 
 ## Soul
+
 Souls are strong passive effects including resurrection, flying and so on.
 Players can hold up to three souls at one time and can not store souls in the inventory.
 When their soul slots are full, players have to give up one for another.
 
 
 ## Item
+
 Items include health potions, buff potions, equipment upgrades and so on.
 
 ## Rarity
+
 All equipment, skills, souls can be divided into four rarities: Common, Rare, Legendary and Cursed. Generally Cursed is the best quality players can find but at a price.
     
 ## Status
+
 Status includes common effects called buff and debuff like increasing players’ attributes, and special effects like loss of control.
 Since special effects are powerful, it has its limitations: the same special effects can only apply to a single target several times in a certain time, and they never stack.
-    
-
 
 ## Merchant
+
 Before entering a level, players could buy starter items from merchants.
 Players would also find merchants during adventures. Their prices are high, but sometimes players would have to make choices between wealth and life.
 
 ## Currency
+
 Players make money by killing monsters, looting treasures and selling items to merchants.
 Upon death, half amount of money will be lost. So, spend it before it’s too late.
 

@@ -14,10 +14,10 @@ the world becomes more challenging. In the same time, players empower themselves
 and cursed but awesome souls to face their indefinite fate.
 
 ## Manual
-Click <a href="Manual">here</a>.
+Click <a href="#Manual">here</a>.
 
 ## Technical Highlights
-Click <a href="Technical Highlights">here</a>.
+Click <a href="#Technical Highlights">here</a>.
 
 ## Notice
 

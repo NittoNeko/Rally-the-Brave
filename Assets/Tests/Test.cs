@@ -5,33 +5,72 @@ using UnityEngine.Profiling;
 using Zenject;
 using UnityEngine.Events;
 using Sirenix.OdinInspector;
+using System.Diagnostics;
+using System.Collections.ObjectModel;
 
-public class Test : MonoBehaviour
+public class Test : SerializedMonoBehaviour
 {
-    public Boo bo;
-    [SerializeField]
-    public int[] nums;
-
+    public IAttrHolder attr;
+    private int loop = 10000;
+    // Test get components and getcomponent
+    // Test compare null and for loop
     private void Awake()
     {
-        if (nums == null)
+        //IAttrHolder single = GetComponent<IAttrHolder>();
+        //IAttrHolder[] mult = GetComponents<IAttrHolder>();
+        attr = GetComponent<IAttrHolder>();
+        Stopwatch stopwatch = new Stopwatch();
+
+        stopwatch.Start();
+        int x = 1;
+        for (int i = 0; i < loop; ++i)
         {
-            print("null");
+            attr.GetAttr(EAttrType.Armor);
         }
+        stopwatch.Stop();
+        UnityEngine.Debug.Log("serialize costs " + stopwatch.Elapsed);
+        stopwatch.Reset();
 
-        print(nums.Length);
+        //stopwatch.Start();
+        //byte a = 1;
+        //byte b = 1;
+        //for (int i = 0; i < loop; ++i)
+        //{
+        //    if (single != null)
+        //    {
+        //        a += b;
+        //    }
+        //}
+
+        //int d = 999999;
+        //byte c = (byte)d;
+        //print(c);
+
+        //stopwatch.Stop();
+        //UnityEngine.Debug.Log("GetComponents costs " + stopwatch.Elapsed);
+        //stopwatch.Reset();
+
+        //stopwatch.Start();
+        //int z = 0;
+        //for (int i = 0; i < loop; ++i)
+        //{
+        //    z += a.num;
+        //}
+
+        //stopwatch.Stop();
+        //UnityEngine.Debug.Log("GetComponentInChildren costs " + stopwatch.Elapsed);
+        //stopwatch.Reset();
+
+        //stopwatch.Start();
+        //EAttrType q;
+        //for (int i = 0; i < loop; ++i)
+        //{
+        //}
+
+        //stopwatch.Stop();
+        //UnityEngine.Debug.Log("GetComponentsInChildren costs " + stopwatch.Elapsed);
+        //stopwatch.Reset();
     }
 
-    private void Update()
-    {
-        
-    }
-}
 
-public class Boo : ITest
-{
-    public int getNum()
-    {
-        throw new System.NotImplementedException();
-    }
 }

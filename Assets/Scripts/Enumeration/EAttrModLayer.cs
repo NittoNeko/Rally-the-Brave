@@ -3,10 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-// Independent should multiply each other and then multiply base value
-// Prefix with Mult should sum up and then multiply base value
-// Additive should sum up and then add to base value
+
+/// <summary>
+/// Modifier layers include multiplicative, additive and independent.
+/// </summary>
 public enum EAttrModLayer
 {
-    Independent, Additive, Mult1, Mult2, Mult3
+    // Notice: independent is a special multiplicative that only timeses other multiplicative.
+    // Calculation for independent requires caution, otherwise caches will cause extra memory usage.
+    Independent, 
+    Additive,
+    // Mult1 applies to Equipment
+    Mult1,
+    // Mult2 applies to Status
+    Mult2,
+    // Mult3 applies to Souls
+    Mult3
 }

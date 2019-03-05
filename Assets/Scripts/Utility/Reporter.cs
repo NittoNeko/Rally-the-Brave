@@ -5,11 +5,13 @@ using UnityEngine;
 
 public static class Reporter
 {
+    /// <summary>
+    /// Check whether components are missing on the same gameobjects.
+    /// </summary>
     [System.Diagnostics.Conditional("DEBUG")]
-    public static void AttrMissing(EAttrType type)
+    public static void ComponentMissing(System.Type type)
     {
-        Debug.LogError("EAttrType " + type + " is missing. It may be caused by an unhandled type.");
+        Debug.LogError("Component " + type + " is missing on this gameobject.");
     }
-
 
 }

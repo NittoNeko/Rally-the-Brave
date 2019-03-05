@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IStatusTaker
 {
-    void TakeStatus();
+    void TakeStatus(SOCharStatus content, byte stack, float timePercent);
 }

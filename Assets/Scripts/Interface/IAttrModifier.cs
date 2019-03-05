@@ -4,8 +4,8 @@ using UnityEngine;
 
 public interface IAttrModifier
 {
-    event AttrModChange OnAttrModChange;
-
-    float[] GetModifiers(EAttrType type);
-
+    /// <summary>
+    /// Apply all modifiers without clearing or refreshing.
+    /// </summary>
+    void ApplyAllModifiers();
 }

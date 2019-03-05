@@ -1,238 +1,91 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 
-public class MBCharStatus : MonoBehaviour, IAttrModifier
+public class MBCharStatus : SerializedMonoBehaviour, IStatusTaker, IAttrModifier
 {
-    private SOSpecialStatusResist specialStatusResist;
-    private SpecialStatusGroup<SpecialStatus> specialStatus;
+    private byte[] SpecialStatus = new byte[EnumArray.SpecialStatusType.Length];
 
-    private List<Status> statuses = new List<Status>(10);
+    private List<CharStatus> statuses = new List<CharStatus>(10);
 
-    public event AttrModChange OnAttrModChange;
+    // Listen on any modifiables in order to send attributes modifiers
+    [Required("This component needs at least one IAttrModifiables to send them modifiers.")]
+    public IAttrModifiable attrModifiable;
 
-    // Avoid duplicate initialization of array
-    private float[] modHolder = new float[EnumArray.AttrModLayerCount];
-
-    public float[] GetModifiers(EAttrType type)
+    public void TakeStatus(SOCharStatus content, byte stack, float timePercent)
     {
-        // Reset all modification to 0
-        for (int i = 0; i < modHolder.Length; ++i)
+        // Try to stack status first
+        // True if successfully stacked, otherwise create new status container
+        if (!TryStack(content, stack, timePercent))
         {
-            modHolder[i] = 0;
+            CharStatus _status = new CharStatus(stack, content.InitialTime * timePercent, content);
+            statuses.Add(_status);
+            ApplyModifier(_status.Content.AttrModifiers, _status.Stack);
         }
-
-        // Base multiplicative should be 1
-        modHolder[(int)EAttrModLayer.Independent] = 1;
-
-        // Iterate through all modifications
-        foreach (Status s in statuses)
-        {
-            foreach (AttrModifier modifier in s.Content.AttrModifiers)
-            {
-                int index = (int) modifier.Layer;
-                if (modifier.Layer == EAttrModLayer.Independent)
-                {
-                    modHolder[index] *= modifier.Value;
-                } else
-                {
-                    modHolder[index] += modifier.Value;
-                }
-            }
-        }
-
-        return modHolder;
     }
 
-    public void TakeStatus(SOStatus content, ushort stack, ushort time)
+    
+    /// <summary>
+    /// Apply all modifiers without clearing or refreshing.
+    /// </summary>
+    public void ApplyAllModifiers()
     {
-        // Find if this status has already existed and stack them
-        foreach(Status status in statuses)
+        foreach(CharStatus _charStatus in statuses)
         {
-            if (status.Content == content)
-            {
-                status.RemainTime += time;
-                status.Stack += stack;
-                TriggerAttrChange(status);
-                return;
-            }
+            ApplyModifier(_charStatus.Content.AttrModifiers, _charStatus.Stack, false);
         }
 
-        // Here no same status found
-        // So add new status
-        Status s = new Status(stack, time, content);
-        statuses.Add(s);
-        TriggerAttrChange(s);
+        attrModifiable.RefreshAll(true);
     }
 
-
+    private void Awake()
+    {
+    }
 
     private void Update()
     {
-        
+
     }
 
-    private void TriggerAttrChange(Status s)
+    /// <summary>
+    /// True if same status found and stacked, otherwise false.
+    /// </summary>
+    /// <returns></returns>
+    private bool TryStack(SOCharStatus content, byte stack, float timePercent)
     {
-        // If no attributes modifiers, skip triggering
-        if (s.Content.AttrModifiers.Length == 0) { return; }
+        // Find if this status has already existed and stack them
+        foreach (CharStatus _status in statuses)
+        {
+            if (_status.Content == content)
+            {
+                byte _prevStack = _status.Stack;
+                _status.RemainTime += content.InitialTime * timePercent;
+                _status.Stack += stack;
+                ApplyModifier(_status.Content.AttrModifiers, (byte)(_status.Stack - _prevStack));
+                return true;
+            }
+        }
 
+        // No such status exists
+        return false;
+    }
+
+
+    private void ApplyModifier(AttrModifier[] modifiers, byte stackDelta, bool isRefresh = true)
+    {
         // For every changed attributes, recalculate them
-        foreach (AttrModifier am in s.Content.AttrModifiers)
+        for(int i = 0; i < stackDelta; ++i)
         {
-            OnAttrModChange(am.AttrType);
-        }
-    }
-
-    private void TriggerSpecialStatus(Status s)
-    {
-        // If no special status, skip triggering
-        if (s.Content.SpecialStatus.Length == 0) { return; }
-
-        foreach(ESpecialStatusType type in s.Content.SpecialStatus)
-        {
-
-        }
-    }
-
-    private void ApplySpecialStatus(ESpecialStatusType type)
-    {
-        SpecialStatus ss = specialStatus.Get(type);
-        SpecialStatusResist ssr = specialStatusResist.Get(type);
-
-        // Check if immune to this effect
-        if (ss.CurrentStack >= ssr.MaxStack)
-        {
-
+            attrModifiable.TakeModifier(modifiers[i])
         }
     }
 
     private void UpdateStatus()
     {
         // Reduce the remaining time of statuses
-        foreach(Status status in statuses)
+        foreach(CharStatus _status in statuses)
         {
 
-        }
-    }
-
-    
-
-
-    private class Status
-    {
-        private ushort stack;
-        private float remainTime;
-        private readonly SOStatus content;
-
-        public ushort Stack { get => stack;
-            set
-            {
-                if (value > content.MaxStack)
-                {
-                    stack = content.MaxStack;
-                } else if (value < 0)
-                {
-                    stack = 0;
-                } else
-                {
-                    stack = value;
-                }
-            }
-        }
-        public float RemainTime { get => remainTime;
-            set
-            {        
-                if (value > content.MaxTime)
-                {
-                    remainTime = content.MaxTime;
-                } else if (value < 0)
-                {
-                    remainTime = 0;
-                } else
-                {
-                    remainTime = value;
-                }
-            }
-        }
-        public SOStatus Content { get => content;}
-
-        public Status(ushort stack, ushort remainTime, SOStatus content)
-        {
-            this.Stack = stack;
-            this.RemainTime = remainTime;
-            this.content = content;
-        }
-    }
-
-    private class SpecialStatus
-    {
-        private ushort remainStack; // If > 0, this effect exists
-        private ushort currentStack; // How many stacks have been applied within reset time
-        private float currentTime; // Start counting down from reset time once this effect has first time applied
-
-        public ushort RemainStack { get => remainStack; set => remainStack = value; }
-        public ushort CurrentStack { get => currentStack; set => currentStack = value; }
-        public float CurrentTime { get => currentTime; set => currentTime = value; }
-
-    }
-
-    [System.Serializable]
-    private class SpecialStatusResist
-    {
-        [SerializeField]
-        private ushort maxStack; // Once current statck reaches max stack, immune to this effect until resetTime reaches zero
-        [SerializeField]
-        private float resetTime;
-
-        public ushort MaxStack { get => maxStack; set => maxStack = value; }
-        public float ResetTime { get => resetTime; set => resetTime = value; }
-    }
-
-    // T can only be SpecialStatus or SpecialStatusResist
-    [System.Serializable]
-    private class SpecialStatusGroup<T>
-    {
-        private T snared; // Unable to move
-        private T unwise; // Unable to use items
-        private T coward; // Unable to use skills
-        private T stunned; // Unable to do any action
-        private T purified; // Immnue to debuff
-        private T unstoppable; // Immnue to special debuffs
-        private T immortal; // Immnue to damage
-
-        public T Get(ESpecialStatusType type)
-        {
-            switch (type)
-            {
-                case ESpecialStatusType.Snared:
-                    return snared;
-                case ESpecialStatusType.Unwise:
-                    return unwise;
-                case ESpecialStatusType.Coward:
-                    return coward;
-                case ESpecialStatusType.Stunned:
-                    return stunned;
-                case ESpecialStatusType.Purified:
-                    return purified;
-                case ESpecialStatusType.Unstoppable:
-                    return unstoppable;
-                case ESpecialStatusType.Immortal:
-                    return immortal;
-                default:
-                    return default;
-            }
-        }
-    }
-
-    [CreateAssetMenu(fileName = "StatusResist", menuName = "ScriptableObject/StatusResist")]
-    private class SOSpecialStatusResist : ScriptableObject
-    {
-        [SerializeField]
-        private readonly SpecialStatusGroup<SpecialStatusResist> specialStatusResist;
-
-        public SpecialStatusResist Get(ESpecialStatusType type)
-        {
-            return specialStatusResist.Get(type);
         }
     }
 }

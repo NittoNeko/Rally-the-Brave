@@ -1,3 +1,4 @@
+<a id="technical_highlights"></a>
 ## Prologue
 
 The basic design pattern behind this project is inspired by 

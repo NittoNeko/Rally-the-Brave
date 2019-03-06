@@ -1,3 +1,4 @@
+<a id="manual"></a>
 ## Character Attributes
 
 Players empower themselves through better items, skills and souls, in order to defeat stronger and stronger foes.

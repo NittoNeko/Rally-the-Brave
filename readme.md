@@ -15,10 +15,12 @@ In order to fulfill your curiosity, levels are randomly generated and as you go 
 the world becomes more challenging. In the same time, players empower themselves with legendary spells, mystic equipments
 and cursed but awesome souls to face their indefinite fate.
 
+<a id="manual"></a>
 ## Manual
 
 Click <a href="Documentation/manual.md">here</a>.
 
+<a id="technical_highlights"></a>
 ## Technical Highlights
 
 Click <a href="Documentation/technical_highlights.md">here</a>.

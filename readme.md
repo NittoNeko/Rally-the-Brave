@@ -17,11 +17,12 @@ and cursed but awesome souls to face their indefinite fate.
 
 ## Manual
 
-Click <a href="Documentation/technical_highlights.md">here</a>.
+Click <a href="Documentation/manual.md">here</a>.
 
 ## Technical Highlights
 
-Click <a href="Documentation/manual.md">here</a>.
+Click <a href="Documentation/technical_highlights.md">here</a>.
+
 
 ## Notice
 

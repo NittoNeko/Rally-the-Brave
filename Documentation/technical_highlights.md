@@ -78,7 +78,7 @@ What else is different?
 5.	Create Interfaces for certain Entities whose Behaviors are required by other Entities.
 6.	Create Entities by integrating Containers and Behaviors altogether.
 7.	Design, Debug and Release.
-8.	Add new features(See <a href="new-content?">details</a>).
+8.	Add new features(See <a href="#new-content">details</a>).
 
 ## What should an Entity be? A GameObject or a C# class?
 

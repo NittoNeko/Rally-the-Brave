@@ -3,8 +3,7 @@
 [System.Serializable]
 public enum EAttrType
 {
-    MaxVitality, VitalityRec, VitalitySteal,
-    MaxPriRes, PriResRec, PriResSteal,
+    MaxHealth, HealthRec, MaxMana, ManaRec,
     Attack, Haste, CritRate, CritMult,
     Focus, Armor, Thorn, MoveSpeed
 }

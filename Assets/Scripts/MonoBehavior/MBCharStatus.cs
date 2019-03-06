@@ -2,16 +2,22 @@
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 
+/// <summary>
+/// Take statuses and apply their effects.
+/// </summary>
 public class MBCharStatus : SerializedMonoBehaviour, IStatusTaker, IAttrModifier
 {
-    private byte[] SpecialStatus = new byte[EnumArray.SpecialStatusType.Length];
+    public MBCharCont character;
 
-    private List<CharStatus> statuses = new List<CharStatus>(10);
-
-    // Listen on any modifiables in order to send attributes modifiers
-    [Required("This component needs at least one IAttrModifiables to send them modifiers.")]
+    [Required("This component needs at least one IAttrModifiables to apply modifiers.")]
     public IAttrModifiable attrModifiable;
 
+    /// <summary>
+    /// <see cref="IStatusTaker.TakeStatus(SOCharStatus, byte, float)"/>
+    /// </summary>
+    /// <param name="content"></param>
+    /// <param name="stack"></param>
+    /// <param name="timePercent"></param>
     public void TakeStatus(SOCharStatus content, byte stack, float timePercent)
     {
         // Try to stack status first
@@ -19,18 +25,17 @@ public class MBCharStatus : SerializedMonoBehaviour, IStatusTaker, IAttrModifier
         if (!TryStack(content, stack, timePercent))
         {
             CharStatus _status = new CharStatus(stack, content.InitialTime * timePercent, content);
-            statuses.Add(_status);
+            character.Status.Add(_status);
             ApplyModifier(_status.Content.AttrModifiers, _status.Stack);
         }
     }
-
     
     /// <summary>
-    /// Apply all modifiers without clearing or refreshing.
+    /// <see cref="IAttrModifier.ApplyAllModifiers"/>
     /// </summary>
     public void ApplyAllModifiers()
     {
-        foreach(CharStatus _charStatus in statuses)
+        foreach(CharStatus _charStatus in character.Status)
         {
             ApplyModifier(_charStatus.Content.AttrModifiers, _charStatus.Stack, false);
         }
@@ -54,7 +59,7 @@ public class MBCharStatus : SerializedMonoBehaviour, IStatusTaker, IAttrModifier
     private bool TryStack(SOCharStatus content, byte stack, float timePercent)
     {
         // Find if this status has already existed and stack them
-        foreach (CharStatus _status in statuses)
+        foreach (CharStatus _status in character.Status)
         {
             if (_status.Content == content)
             {
@@ -70,20 +75,25 @@ public class MBCharStatus : SerializedMonoBehaviour, IStatusTaker, IAttrModifier
         return false;
     }
 
-
+    /// <summary>
+    /// Applies certain stacks of modifiers with/out refreshing attirbutes.
+    /// </summary>
+    /// <param name="modifiers"></param>
+    /// <param name="stackDelta"></param>
+    /// <param name="isRefresh"></param>
     private void ApplyModifier(AttrModifier[] modifiers, byte stackDelta, bool isRefresh = true)
     {
-        // For every changed attributes, recalculate them
+        // Apply the same modifiers for stackDelta times
         for(int i = 0; i < stackDelta; ++i)
         {
-            attrModifiable.TakeModifier(modifiers[i])
+            attrModifiable.TakeModifier(modifiers, false);
         }
     }
 
     private void UpdateStatus()
     {
         // Reduce the remaining time of statuses
-        foreach(CharStatus _status in statuses)
+        foreach(CharStatus _status in character.Status)
         {
 
         }

@@ -123,7 +123,6 @@ GameObject:
   - component: {fileID: 583252399}
   - component: {fileID: 583252398}
   - component: {fileID: 583252397}
-  - component: {fileID: 583252401}
   - component: {fileID: 583252400}
   m_Layer: 0
   m_Name: Main Camera
@@ -205,31 +204,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 583252396}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7dbc139eee173b944aeeffd3618ab6f1, type: 3}
+  m_Script: {fileID: 11500000, guid: 02c821c7e6a9f5b469d7e96255d0fc46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects:
-    - {fileID: 583252401}
+    ReferencedUnityObjects: []
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes:
-    - Name: attrModifiable
-      Entry: 10
-      Data: 0
---- !u!114 &583252401
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 583252396}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ecd7a7a64fa1f94ba4b740210fd6fcf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+    SerializationNodes: []

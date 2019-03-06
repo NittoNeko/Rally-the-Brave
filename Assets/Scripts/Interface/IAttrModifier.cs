@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Send modifiers to modifier takers.
+/// </summary>
 public interface IAttrModifier
 {
     /// <summary>

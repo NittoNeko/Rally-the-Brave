@@ -10,45 +10,16 @@ using System.Collections.ObjectModel;
 
 public class Test : SerializedMonoBehaviour
 {
-    public IAttrHolder attr;
     private int loop = 10000;
+    private int i = 0;
+    Stopwatch stopwatch = new Stopwatch();
     // Test get components and getcomponent
     // Test compare null and for loop
     private void Awake()
     {
         //IAttrHolder single = GetComponent<IAttrHolder>();
         //IAttrHolder[] mult = GetComponents<IAttrHolder>();
-        attr = GetComponent<IAttrHolder>();
-        Stopwatch stopwatch = new Stopwatch();
 
-        stopwatch.Start();
-        int x = 1;
-        for (int i = 0; i < loop; ++i)
-        {
-            attr.GetAttr(EAttrType.Armor);
-        }
-        stopwatch.Stop();
-        UnityEngine.Debug.Log("serialize costs " + stopwatch.Elapsed);
-        stopwatch.Reset();
-
-        //stopwatch.Start();
-        //byte a = 1;
-        //byte b = 1;
-        //for (int i = 0; i < loop; ++i)
-        //{
-        //    if (single != null)
-        //    {
-        //        a += b;
-        //    }
-        //}
-
-        //int d = 999999;
-        //byte c = (byte)d;
-        //print(c);
-
-        //stopwatch.Stop();
-        //UnityEngine.Debug.Log("GetComponents costs " + stopwatch.Elapsed);
-        //stopwatch.Reset();
 
         //stopwatch.Start();
         //int z = 0;
@@ -72,5 +43,9 @@ public class Test : SerializedMonoBehaviour
         //stopwatch.Reset();
     }
 
-
+    private void Update()
+    {
+    }
 }
+
+

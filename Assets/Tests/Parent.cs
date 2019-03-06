@@ -10,26 +10,17 @@ using System.Collections.ObjectModel;
 
 public class Parent : MonoBehaviour
 {
-    public MBCharAttr attr;
+
     private int loop = 10000;
     // Test get components and getcomponent
     // Test compare null and for loop
     private void Awake()
     {
+        for (int i = 0; i < )
+        gameObject.AddComponent<Test>();
+
         //IAttrHolder single = GetComponent<IAttrHolder>();
         //IAttrHolder[] mult = GetComponents<IAttrHolder>();
-        attr = GetComponent<MBCharAttr>();
-        Stopwatch stopwatch = new Stopwatch();
-
-        stopwatch.Start();
-        int x = 1;
-        for (int i = 0; i < loop; ++i)
-        {
-            attr.GetAttr(EAttrType.Armor);
-        }
-        stopwatch.Stop();
-        UnityEngine.Debug.Log("GetComponent costs " + stopwatch.Elapsed);
-        stopwatch.Reset();
 
         //stopwatch.Start();
         //byte a = 1;
@@ -73,4 +64,12 @@ public class Parent : MonoBehaviour
     }
 
 
+}
+
+class Updatable
+{
+    public void update()
+    {
+
+    }
 }

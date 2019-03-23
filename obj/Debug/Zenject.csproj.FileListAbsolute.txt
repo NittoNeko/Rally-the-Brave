@@ -624,3 +624,8 @@ D:\Unity Project\Rally the Brave\obj\Debug\Zenject.csproj.CoreCompileInputs.cach
 D:\Unity Project\Rally the Brave\obj\Debug\Zenject.csproj.CopyComplete
 D:\Unity Project\Rally the Brave\obj\Debug\Zenject.dll
 D:\Unity Project\Rally the Brave\obj\Debug\Zenject.pdb
+D:\Unity Project\Rally the Brave\Temp\bin\Debug\Newtonsoft.Json.dll
+D:\Unity Project\Rally the Brave\Temp\bin\Debug\Photon3Unity3D.dll
+D:\Unity Project\Rally the Brave\Temp\bin\Debug\websocket-sharp.dll
+D:\Unity Project\Rally the Brave\Temp\bin\Debug\Photon3Unity3D.pdb
+D:\Unity Project\Rally the Brave\Temp\bin\Debug\Photon3Unity3D.xml

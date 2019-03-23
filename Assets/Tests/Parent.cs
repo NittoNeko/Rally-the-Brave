@@ -10,14 +10,13 @@ using System.Collections.ObjectModel;
 
 public class Parent : MonoBehaviour
 {
-
+    public int n = 0;
+    public Test t;
     private int loop = 10000;
     // Test get components and getcomponent
     // Test compare null and for loop
     private void Awake()
     {
-        for (int i = 0; i < )
-        gameObject.AddComponent<Test>();
 
         //IAttrHolder single = GetComponent<IAttrHolder>();
         //IAttrHolder[] mult = GetComponents<IAttrHolder>();
@@ -41,35 +40,27 @@ public class Parent : MonoBehaviour
         //UnityEngine.Debug.Log("GetComponents costs " + stopwatch.Elapsed);
         //stopwatch.Reset();
 
-        //stopwatch.Start();
-        //int z = 0;
-        //for (int i = 0; i < loop; ++i)
-        //{
-        //    z += a.num;
-        //}
+       
+    }
 
-        //stopwatch.Stop();
-        //UnityEngine.Debug.Log("GetComponentInChildren costs " + stopwatch.Elapsed);
-        //stopwatch.Reset();
+    public void G()
+    {
 
-        //stopwatch.Start();
-        //EAttrType q;
-        //for (int i = 0; i < loop; ++i)
-        //{
-        //}
+    }
 
-        //stopwatch.Stop();
-        //UnityEngine.Debug.Log("GetComponentsInChildren costs " + stopwatch.Elapsed);
-        //stopwatch.Reset();
+    private void FixedUpdate()
+    {
+        n += 1;
+
+        print(n);
     }
 
 
-}
-
-class Updatable
-{
-    public void update()
+    private void Update()
     {
-
+        if (n == 10)
+        {
+            print("win");
+        }
     }
 }

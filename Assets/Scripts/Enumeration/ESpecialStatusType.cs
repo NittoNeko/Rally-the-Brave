@@ -4,5 +4,5 @@ using UnityEngine;
 
 public enum ESpecialStatusType
 {
-    Snared, Unwise, Coward, Stunned, Purified, Unstoppable, Immortal
+    Snared, Unwise, Coward, Purified, Immortal
 }

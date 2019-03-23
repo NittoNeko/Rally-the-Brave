@@ -7,45 +7,77 @@ using UnityEngine.Events;
 using Sirenix.OdinInspector;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
+using UnityEngine.SceneManagement;
 
-public class Test : SerializedMonoBehaviour
+public delegate void TTT(float a ,float b, float c , float d);
+
+public class Test : MonoBehaviour
 {
-    private int loop = 10000;
-    private int i = 0;
+    public bool IsDestroy = false;
+    public SOStatusTpl status;
+    public Test[] test;
+    private int loop = 100;
+    private bool iii = true;
+    public QWE qwe;
+    private string s = "asd";
     Stopwatch stopwatch = new Stopwatch();
+    private List<int> ints = new List<int>();
+
     // Test get components and getcomponent
     // Test compare null and for loop
     private void Awake()
     {
-        //IAttrHolder single = GetComponent<IAttrHolder>();
-        //IAttrHolder[] mult = GetComponents<IAttrHolder>();
-
-
-        //stopwatch.Start();
-        //int z = 0;
-        //for (int i = 0; i < loop; ++i)
+        //for(int i = 0; i < attr.Length; ++i)
         //{
-        //    z += a.num;
+        //    attr[i] = new harAttr();
+        //    t += attr[i].NT;
         //}
 
-        //stopwatch.Stop();
-        //UnityEngine.Debug.Log("GetComponentInChildren costs " + stopwatch.Elapsed);
-        //stopwatch.Reset();
-
-        //stopwatch.Start();
-        //EAttrType q;
-        //for (int i = 0; i < loop; ++i)
-        //{
-        //}
-
-        //stopwatch.Stop();
-        //UnityEngine.Debug.Log("GetComponentsInChildren costs " + stopwatch.Elapsed);
-        //stopwatch.Reset();
+        dsa
     }
 
-    private void Update()
+    public void testSpeed()
     {
+        stopwatch.Start();
+
+        for (int i = 0; i < loop; ++i)
+        {
+            print("asd");
+        }
+
+        stopwatch.Stop();
+        UnityEngine.Debug.Log("empty loop " + stopwatch.Elapsed);
+        stopwatch.Reset();
+
+        stopwatch.Start();
+
+        for (int i = 0; i < loop; ++i)
+        {
+            print(s);
+        }
+
+        stopwatch.Stop();
+        UnityEngine.Debug.Log("empty loop " + stopwatch.Elapsed);
+        stopwatch.Reset();
     }
+
 }
 
+[System.Serializable]
+public class QWE
+{
+    public int i = 0;
 
+    public int n = Initial();
+
+    public QWE()
+    {
+
+    }
+
+    public static int Initial()
+    {
+
+        return 1;
+    }
+}

@@ -9,8 +9,7 @@ using UnityEngine;
 /// </summary>
 public enum EAttrModLayer
 {
-    // Notice: independent is a special multiplicative that only timeses other multiplicative.
-    // Calculation for independent requires caution, otherwise caches will cause extra memory usage.
+    // independent is a special multiplicative that only timeses other multiplicative
     Independent, 
     Additive,
     // Mult1 applies to Equipment

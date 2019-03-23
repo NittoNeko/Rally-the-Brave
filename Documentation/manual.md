@@ -3,30 +3,25 @@
 
 Players empower themselves through better items, skills and souls, in order to defeat stronger and stronger foes.
 Attributes include:
-1.  Health: When players’ health reaches zero, game is over.
-2.  Mana: Primary resource used to cast spells.
-3.  Max Health/Mana: Upper limit of players’ health/mana
-4.  Health/Mana Steal: Health/Mana recovered per hit.
-5.  Health/Mana Recovery: Health/Mana recovered per second.
-6.  Attack: Damage dealt to enemies.
-7.  Armor: Reduction of damage received.
-8.  Critical Chance: Chance to deal extra damage
-9.  Critical Multiple: How much extra damage a critical hit can cause.
-10. Thorn: Damage returned to attackers, ignoring their armors.
-11. Haste: Reduction of interval between attacks and skills’ cooldown.
-12. Focus: Reduction of skills’ costs.
-13. Movement: How fast players can move.
+1.  Vitality: Determine how many damage a character can take before dead.
+2.  Spirit: Determine how many spells a character can cast before drained.
+3.  Attack: Damage dealt to enemies.
+4.  Armor: Reduction of damage received.
+5.  Critical Chance: Chance to deal extra damage
+6.  Critical Multiple: How much extra damage a critical hit can cause.
+7.  Movement: How fast players can move.
+8. Dodge: Chance to dodge an attack.
 
 ## Equipment
 
 Equipment is used to increase players’ attributes, and sometimes it can bring special effects to players.
 Equipment includes:
-1.  Weapon: Decides Attack, Haste, Critical Chance, Critical Multiple and Focus
-2.  Head: Decides Max Mana, Mana Steal, Mana Recovery, Focus, Critical Chance.
-3.  Chest: Decides Max Health, Health Steal, Health Recovery, Thorn and Armor.
-4.  Leg: Decides Health Recovery, Mana Recovery, Armor, Movement Speed, Thorn.
-5.  Feet: Decides Health Steal, Mana Steal, Movement Speed, Haste, Attack.
-6.  Hand: Decides Health Steal, Mana Steal, Attack, Haste and Critical Multiple.
+1.  Weapon: Decides Attack, Haste, Critical Chance, Critical Multiple and Focus.
+2.  Head: Decides Max Mana, Focus, Critical Chance, and Critical Multiple.
+3.  Chest: Decides Max Health, Max Mana, Thorn and Armor.
+4.  Leg: Decides Max Health, Armor, Movement Speed, Thorn.
+5.  Feet: Decides Attack, Movement Speed, Haste, and Dodge.
+6.  Hand: Decides Attack, Dodge, Haste and Focus.
 7.  Trinket and Ring: All attributes can appear.
 Each piece of equipment can be enhanced up to five times, each time increases its attributes by 20%.
 
@@ -52,12 +47,21 @@ Items include health potions, buff potions, equipment upgrades and so on.
 
 ## Rarity
 
-All equipment, skills, souls can be divided into four rarities: Common, Rare, Legendary and Cursed. Generally Cursed is the best quality players can find but at a price.
+All equipment, skills, souls can be divided into four rarities: Common, Rare, Legendary.
     
 ## Status
 
 Status includes common effects called buff and debuff like increasing players’ attributes, and special effects like loss of control.
 Since special effects are powerful, it has its limitations: the same special effects can only apply to a single target several times in a certain time, and they never stack.
+
+Special Debuff include:
+*   snared: cannot move.
+*   unwise: cannot use item.
+*   coward: cannot use any skill.
+
+Special 
+*   purified: immune to debuff.
+*   immortal: immune to damage.
 
 ## Merchant
 

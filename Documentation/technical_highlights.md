@@ -2,143 +2,228 @@
 ## Prologue
 
 The basic design pattern behind this project is inspired by 
-Entity Component System(ECS), Interface-based Programming,
-Component-based Architecture and Composition-over-Inheritance.
+Entity Component System(ECS), Interface-based Programming and Component-based Architecture.
 
-Although ECS is very great for large-scale games,
-it is not ready yet for production and it is kind of counterintuitive when making small games.
-Hence, I spent several months on experimenting with my personal project, Rally the Brave,
-and finally discovered an architecture called Entity Container Behavior (ECB).
+I spent several months on learning from those techniques, 
+taking their benefits into my design, 
+and experimenting with my personal project, Rally the Brave,
+and finally discovered an architecture called Template Interface Entity(TIE).
 
-## Entity, Container and Behavior:
-1.	Entities are conceptually classified into three types:
-	1.	GameObjects that have both Containers and Behaviors attached. 
-		This kind of Entities have their Behavior autonomy and 
-	2.	GameObjects that have only Containers attached but do have their Behaviors.
-		E.g., if hundreds of enenmies are attacking at the same time, having Update() on each of them would be inefficient.
-		Instead, a manager-level Bahavior will collect all of them and and process them all together.
-	3.	C# classes just like Containers because they do not need any functionality from GameObject.
-2.	Containers are classes that contain no major logic and serve purely as data structures,
-	In most cases, a Container is simply a ScriptableObject(SO) asset.
-	In some cases, Containers are MonoBehaviors attached to Gameobjects.
-	In the rest of cases, Containers are normal C# classes that is within other Containers.
-3.	Behaviors are simply MonoBehaviors that interact directly with game worlds, i.e.,
-	they implement functions and process data in Containers and game worlds.
-	When Behaviors must communicate with each other, they should implement Interfaces so that they become replacable
-	(just like replacable Components in Component-based Architecture).
-	Behaviors could be classfied as Manager and System:
-	1.	A System Behavior is very similar to System in ECS. It collects all Containers with the same type, and process them all together.
-	2.	A Manager Behavior is attached together with the Containers it needs on the same GameObject. 
-		So, we are giving those GameObjects autonomy when they should behave like an independent Entity.
+## What is the truth(history) behind TIE?
 
-## Basic Idea
+It is really hard to find a proper architecture.
+Sometimes I wish I could get rid of all Inheritance and Interfaces 
+so that the whole structure of projects is simplified.
+Rest of the time, I think it is so good to let everything implement Interfaces or base abstract classes,
+in order to achieve the highest scalability and the lowest decoupling.
 
-*	A game Entity is defined by sets of data like Shape, Color, Position and so on.
-*	Players interact with the game world by invoking Behaviors.
-*	Behaviors manipulate data in Entities.
-*	Players receive responses from data modifications.
+So, guess what? The former is kind of "lazy" programming,
+and in later development when you try to modify/fix/add contents it is just painful.
+But the latter is also kinda over-engineering, complex and unfriendly.
+All Interitance and Interfaces can do is to make sure the "contract" is right,
+they do not break the "connections" nor guanrantee that the "result" is what you want.
 
-## What's the difference from traditional OOP?
+Then, I was stuck with my architecture design and appealed for new inspirations.
+After massive researches, suddenly, an article about Unity ECS saved my life and brought me to a new world.
+I started to learn about ECS and successfully "stole" a lot of fantastic ideas from it.
+Then after another long time of refinement,
+an architecture called Entity Template Container Behaviour(ETCB) was born in the new world.
 
-For example, a character is going to take Bleeding effect from an attack:
-*	In tradition OOP, the procedures could be:
-	1.	Bleeding is a class that holds a reference to the character and a function called Tick().
-	2.	Character.TakeStatus(Bleeding) adds Bleeding to Character triggered by users' actions.
-	3.	We call Character.UpdateStatus() to trigger Tick() of all Bleeding statues.
-	4.	Tick() then calls Character.TakeDamage(Power) will be called.
-	5.	TakeDamage(Power) reduces Character's Health by Power.
-*	Whereas in ECB:
-	1.	CharCont and BleedCont are pure data Containers, and StatusMgr : IStatusTaker is a third-party Behavior attached to an Entity called Player.
-	2.	IStatusTaker.TakeStatus(BleedCont) adds BleddCont to CharCont triggered by users' actions.
-	3.	IStatusTaker.Update() calls IDamagable.TakeDamage(BleedCont.Power).
-	4.	IDamagable.TakeDamage(Power) decreases CharCont's Health by Power.
+However, I was wrong. 
+I thought it would be the end to my jouney, but in fact it was just an incentive for my next architecture design.
+I found several serious problems with ETCB(if interested please visit it from the link in the front page),
+and Swarm Robotics is just much more intuitive, suitable for OOP(C#) and flexible.
 
-So here are several important points from examples above:
-*	Separation - we separate what a Bleeding Effect IS from what it DOES.
-*	Replacable - we let TakeStatus() implement Interfaces because it is triggered outside StatusMgr,
-	and Interfaces make sure it can be replaced by other implementations without affecting callers.
-*	Third-party - Major logic is placed neither in Character nor Bleeding Status, but outside of them.
-*	Independent - no one really owns Behaviors, since they are independent processors and can be placed anywhere.
+So, I came back to my initial coding style along with some souvenirs from each techniques.
+Hopefully, this architecutre called Template Interface Entity(TIE) would be my final habitat.
 
-What else is different?
-*	Composition-over-Inheritance
-	*	In traditional OOP, new variations often come from Inheritance (e.g., Status -> Buff -> AttackBuff).
-	*	In ECB, new variations are created by modifying data and behaviors
-		(e.g., Status with an attribute modifier that modifies Attack).
+## Template Interface Entity(TIE)
+
+TIE is a hybrid architecutre specialized in game development, 
+which classifies all game things in to three types: Template, Interface and Entity.
+
+The basic idea is:
+
+*	A Entity may include predefined Templates that describe a Game Object.
+*	A Game Object is comprised of Entites like Character, Iventory and so on.
+*	Entities are updated as time passes.
+*	Players interact with the game world by invoking Interfaces like Take Damage.
+*	Entites may invoke other Entites through Interfaces.
+*	Players perceive changes of Entities through graphic, UI elements and so on.
+
+## Template
+
+Templates refer to shared data structures with unique instances/assets
+that are predefined in editor and read-only during life-time.
+
+Templates are typically classified as:
+*	Scriptable Objects and their assets/instances.
+*	Serializable C# classes that serve as parts of Scriptable Object.
+*	External static data like database.
+
+## Interface
+
+Interfaces in TIE act as communication bridges between objects that need to talk with each other.
+*	When passing parameters, Interfaces should be passed instead of concrete objects.
+	However, exceptions include:
+	*	stable classes like .net API and Unity Engine API that are considered reliable.
+	*	immutable data structs that are similar to primitive types.
+*	The public parts of classes should always be encapsulated by Interfaces.
+	However, exceptions include:
+	*	private classes that are used locally.
+	*	utility classes that are stable and closed to modification.
+
+For example:
+*	when A depends on B's Behaviours it should rely on only WHAT B does(Interface) instead of HOW B does something(specific implementation).
+*	when A provides some services for others, it extracts those services and put them into an Interface.
+
+## Entity
+
+Entities are the basic components that build up the game world.
+They are independent and autonomous objects that contain data and behaviours.
+
+They are conceptually classified into three types:
+
+1.	MonoBehaviours attached to Game Objects that interact directly with game worlds through Unity Engine functions.
+2.	C# classes that would finally interact with game worlds indirectly through other MonoBehaviour Entities.
+
+## How to work with TIE?
+
+1.	Specify what kind of Templates are needed in order to define different aspects of Game Objects.
+2.	Specify what kind of functionalities are needed in order to make the game interactive.
+3.	Specify what kind of Entities are needed in order to achieve these functionalities.
+4.	Create Interfaces to encapsulate Entities.
+5.	Design, Debug and Release.
+6.	Add new features(See <a href="#new-content">details</a>).
+
+## Takeaway from different techniques
+
+*	Component-based Architecture
+	*	A Game Object is just like a container for Components.
+	*	Entities are replaceable Components for Game Objects.
+*	Entity Component System(ECS)
+	* 	A large number(thousands) of Game Objects should be handled by a manager.
+*	Swarm Robotics
+	*	Objects are generally handled in a decentralised manner.
+	*	Objects accomplish their tasks individually.
 *	Interface-based Programming
-	*	In traditional OOP, anything could be passed as parameters.
-	*	In ECB, only Interfaces and Containers are suggested to be passed to others.
-		I.e., parameter receivers should not rely on specific implementations.
+	*	Use Interface to decouple classes.
+	*	Multiple Interfaces.
 
-## How to work with ECB?
-
-1.	Specify what kind of functionalities we need in order to make the game interactive.
-2.	Specify what kind of Entities are needed in order to achieve these functionalities.
-3.	Create Containers that describe Entities.
-4.	Create Behaviors that manipulate Containers.
-5.	Create Interfaces for certain Entities whose Behaviors are required by other Entities.
-6.	Create Entities by integrating Containers and Behaviors altogether.
-7.	Design, Debug and Release.
-8.	Add new features(See <a href="#new-content">details</a>).
-
-## What should an Entity be? A GameObject or a C# class?
-
-*	If the Entity needs to be actually placed in game world, be visible and interact physically with others, a GameObject is required.
-*	Anything else should be a C# class.
-
-## Why not every Entity be GameObject?
-
-*	Instantiating and Destroying GameObjects are expensive.
-*	Even empty GameObjects could incur costs if users are not careful.
-
-## Why Containers not implement Interface?
-
-Someone may ask why Containers do not implement Interfaces 
-if ECB is following Replacable Components principle of Component-based Architecture.
-
-Well, because it is the data that makes a game Entity what it is. If data are replacable, the Entity would be undefined.
-
-## Why separate data from logic(why pure data container)?
-
-*	Pure data containers are easy to be serialized and stored permanently.
-*	Pure data containers are easy to be sent to other through any communication bridges like network.
-*	Separation makes codes easy to read, modularized, reusable and maintainable.
-
-## Why Containers be Scriptable Objects?
+## Why Templates be Scriptable Objects?
 
 *	Sctiptable Objects are designed to store pre-defined, unique and immutable data.
 *	Sctiptable Object assets are stable and independent instances throughout the whole project, which avoids duplicate data and saves memory.
 *	Designers and artists don't have to understand programming in order to manipulate Sctiptable Objects assets.
-*	Variations are easy to make by adjusting variables in Sctiptable Objects assets. 
-	E.g., HealthPotion = 50 Healing Power + 0 Attack Increase, AttackPotion = 0 Healing Power + 10 Attack Increase
-	and MysticPotion = 100 Healing Power + 20 Attack Increase. 
+*	Scriptable Objects assets can be adjusted easily in the inspector just like a prefab.
+*	Scriptable Objects can be referred by fields/variables in scritpts.
 
-## Why put Behaviors in MonoBehavior?
+## Why Template be Database?
 
-*	Wherever you put logic it must finally interact with the game world.
-*	MonoBehaviors provide abilities to interact with the game world.
-*	Lower level of indirection and abstraction 
-	because we don't have to do things like calling A() that calls B() that calls C() that calls D() in order to call E().
+*	store and modify persistent user data on disk.
+*	restore data from disk next time the app is open.
+*	let players make their own Mods.
+
+## What type an Entity should be?
+
+*	If a game thing needs to be actually placed in game world, be visible and interact physically with others,
+	then the game thing should be a Game Object and of course all its Entities should be MonoBehaviours.
+*	Anything else should be a C# class.
+
+## Why not Game Objects all the time?
+
+*	Instantiating and Destroying GameObjects and Scritable Objects are expensive.
+*	Even empty GameObjects could incur costs if users are not careful.
+*	Unity Engine functions like Update are so slow that if you are handling thousands of Game Objects,
+	you should let one manager Game Object handle all others together.
 
 <a id="new-content"></a>
-## Aggressive or Conservative increment?
+## Composition vs Inheritance
 
-There always comes a time when new features are to be added to existing contents.
+Composition is the main work flow that Unity suggests,
+but that does not mean we should abandon Inheritance,
+because they are serving for different purposes.
 
-Should we be aggressive or conservative?
+Choose Composition when:
+*	Templates are going to be defined.
+	*	A Bleeding is a Status Template has a description and a health modifier.
+	*	A Holy is a Status Template has a description and a attribute modifier.
+*	Game Objects are going to be defined.
+	*	A duck is a Game Object that has a duck image and swim ability.
+	*	A cat is a Game Object that has a cat image and jump ability.
+*	a new feature that is NOT closely related to existing contents is added.
+	*	A flame duck a Game Object that can swim and shoot fire balls.
+	*	Shooting fire balls are not related to swimming, so it can be added as a component directly.
 
-Aggresive increment means we create new Behaviors (and potentially new Entities) to adapt new features.
-*	When new features differ very much from existing contents.
-*	When solely modifying existing contents do not make sense because new features are unique.
+Choose Inheritance when:
+*	existing behaviours are going to be modified.
+	*	A duck has a swim ability that swims forward.
+	*	A coward duck inherits from duck that has a swim ability that swims backward.
+*	a new feature that IS closely related to existing contents is added.
+	*	A brave duck inherits from duck that dashes only forward when swimming.
+	*	This new feature is HARD to achieve by simply add a new component.
+	*	Creating a similar Component to replace the old one would cause duplicate codes.
 
-On the other hand, Conservative increment suggests to adding new data to existing Containers and modifying existing Behaviors.
-*	If new features are so similar to existing contents that new Behaviors will result in duplicate/similar codes.
-*	If new features are likely to become common and shared between existing contents.
+In conclusion,
+*	A Game Object is COMPOSED of Entities.
+*	Entity vairants can INHERIT from existing Entities.
 
-## Drawback
+## Zenject(DI, IoC and Singleton)!
 
-*	Code duplication which might be solved by auxiliary classes, extension methods and so on.
-*	Entities must be attached to Gameobjects.
-*	Adding unneccessary complexities and indirection to codes.
-*	Extra memory usage and expensive virtual/delegate calls would be involved.
-*	In some cases, ECB introduces a trade-off between performance and scalability.
+Singleton pattern is powerful and necessary in game development,
+but how it is implemented is still controversial in Unity,
+because:
+*	a singleton must be unique.
+*	a singleton may be passed to any arbitrary object(and we don't even know who needs it).
+*	a singleton may intantiate other singletons(just like a bootstrap).
+
+This is where Zenject kicks in, and solves all problems.
+Zenject is a Dependency Inject plugin in Unity,
+and the most use of Zenject in TIE is to achieve Singleton pattern.
+
+But, what does it do with Singleton Pattern?
+*	Zenject is just a root layer singleton.
+*	Zenject keep track of singletons and make sure they are unique.
+*	Any other singletons are registered to Zenject.
+*	When on demand, Zenject instantiates required singletons.
+*	When on demand, Zenject injects those singletons into any object that is asking for the references.
+
+## Event Aggregator
+
+An Event Aggregator is a Singleton that
+*	"acts as a single source of events"(<a href="https://martinfowler.com/eaaDev/EventAggregator.html">Source</a>).
+*	aggregates and listens on Subjects' events.
+*	forwards these events to Observers that have registered for the events.
+*	adds one level of indirection to event handling.
+*	decreases coupling further than Delegates.
+*	reduces complexity further than Observer Pattern.
+
+In TIE, Event Aggregator = Zenject(Singleton) + Delegate + Interface + Observer Pattern.
+
+## Delegate
+
+*	Generally delegate should be declared in Interfaces only.
+*	Delegate should not pass concrete class parameters.
+
+## Name Convention
+
+Prefix:
+*	"MB" means it derives from MonoBehaviour.
+*	"SO" means it derives from Scriptable Object.
+*	"E" means it is an enum.
+*	"I" means it is an Interface.
+*	"S" means it is a data Struct.
+*	Otherwise it derives from System.Object.
+
+Suffix:
+*	"Tpl" means it is a Template.
+*	"Mgr" means it is a manager.
+
+
+
+## Glossary
+
+*	Subject: a source object that fires an event.
+*	Observer: an object that listens on an event that a Subject fires.
+*	C# class: a class that does not inherits from Unity Engine classes.
+*	Unity Engine class: a class that inherits from Unity Engine classes.

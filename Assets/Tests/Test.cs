@@ -81,3 +81,8 @@ public class QWE
         return 1;
     }
 }
+
+public class TestB : MBAttrMgr
+{
+    private Attribute attr;
+}

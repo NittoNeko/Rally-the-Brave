@@ -222,7 +222,6 @@ D:\Unity Project\Rally the Brave\Temp\bin\Debug\Unity.DataContract.dll
 D:\Unity Project\Rally the Brave\Temp\bin\Debug\ExCSS.Unity.dll
 D:\Unity Project\Rally the Brave\Temp\bin\Debug\Unity.Legacy.NRefactory.dll
 D:\Unity Project\Rally the Brave\Temp\bin\Debug\Unity.UNetWeaver.dll
-D:\Unity Project\Rally the Brave\Temp\bin\Debug\Boo.Lang.dll
 D:\Unity Project\Rally the Brave\Temp\bin\Debug\Unity.IvyParser.dll
 D:\Unity Project\Rally the Brave\Temp\bin\Debug\UnityEditor.iOS.Extensions.Xcode.dll
 D:\Unity Project\Rally the Brave\Temp\bin\Debug\SyntaxTree.VisualStudio.Unity.Messaging.dll

@@ -21,7 +21,7 @@ and cursed but awesome souls to face their indefinite fate.
 Click <a href="Documentation/manual.md">here</a>.
 
 <a id="technical_highlights"></a>
-## Technical Highlights(Architecture, Design Pattern and Technique)
+## Technical Highlights
 
 Click <a href="Documentation/technical_highlights.md">here</a>.
 
@@ -36,6 +36,11 @@ Click <a href="Documentation/observation.md">here</a>.
 
 <a id="deprecated"></a>
 ## Deprecated Architecture
+
+Why deprecated?
+1.  I didn't have a full understanding of Entity Component System and Data Oriented Design.
+2.  This architecture isn't taking advantages of OOP nor DOD.
+3.  This architecture introduces large-scale resuability but causes small-scale duplicate codes.
 
 Click <a href="Documentation/deprecated.md">here</a>.
 

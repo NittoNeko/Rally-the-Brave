@@ -13,7 +13,7 @@ public static class EnumArray
     public static EAttrModLayer[] AttrModLayer { get; }
         = System.Enum.GetValues(typeof(EAttrModLayer)) as EAttrModLayer[];
 
-    public static ESpecialStatusType[] SpecialStatusType { get; }
-    = System.Enum.GetValues(typeof(ESpecialStatusType)) as ESpecialStatusType[];
+    public static ESpecialEffectType[] SpecialStatusType { get; }
+    = System.Enum.GetValues(typeof(ESpecialEffectType)) as ESpecialEffectType[];
 
 }

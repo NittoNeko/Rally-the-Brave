@@ -1,16 +1,4 @@
 <a id="deprecated"></a>
-## Why deprecated?
-
-1.	If we separate data from logic,
-	*	seperation makes data operations prone to error.
-	*	data container exposed to the public is unsafe.
-	*	somtimes it is just impossible and meaningless to seperate them.
-2.	If data containers are irreplaceable Components without Interface,
-	*	sometimes we just want a summary(ISummary), not a concrete data container.
-	*	data containers must be too fine-grained to achieve the same scalability.
-	*	Interface in this case is more like a functionality contract instead of a connector,
-		because we let only Behaviours implement Interface.
-
 ## Prologue
 
 The basic design pattern behind this project is inspired by 

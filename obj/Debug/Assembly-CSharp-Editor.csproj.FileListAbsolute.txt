@@ -1,0 +1,2 @@
+D:\Unity Project\Rally the Brave\obj\Debug\Assembly-CSharp-Editor.csprojAssemblyReference.cache
+D:\Unity Project\Rally the Brave\obj\Debug\Assembly-CSharp-Editor.csproj.CoreCompileInputs.cache

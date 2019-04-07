@@ -5,10 +5,10 @@ using UnityEngine;
 public class AttrModifierEffect : IAttrModifierEffect
 {
     private ActualModifier[] modifiers;
-    private IAttrModifiable taker;
+    private IAttrModifierTaker taker;
     private int stack;
 
-    public AttrModifierEffect(AttrModifierTpl[] modifiers, IAttrModifiable taker)
+    public AttrModifierEffect(AttrModifierTpl[] modifiers, IAttrModifierTaker taker)
     {
         for ( int i = 0; i < modifiers.Length; ++i)
         {
@@ -26,73 +26,40 @@ public class AttrModifierEffect : IAttrModifierEffect
         // add modifier if positive
         if (_delta > 0)
         {
-            taker.TakeModifier();
+            ApplyAll(_delta);
+        } else if (_delta < 0)
+        {
+            RemoveAll(Mathf.Abs(_delta));
         }
     }
 
-    public void OnApply()
+    private void ApplyAll(int stack)
     {
-        // apply the same modifiers for stackDelta times
-        foreach (ActualModifier _modifier in modifiers)
+        for (int i = 0; i < stack; ++i)
         {
-            for (int i = 0; i < stackDelta; ++i)
+            for (int j = 0; j < modifiers.Length; ++j)
             {
-                taker.TakeModifier(_modifier, _modifier., false);
-            }
-        }
-    }
-
-    public void OnRemove()
-    {
-        for (int i = 0; i < stackDelta; ++i)
-        {
-            taker.RemoveModifier(_modifier, false);
-        }
-    }
-
-
-
-    /// <summary>
-    /// Applies certain stacks of modifiers with/out refreshing attirbutes.
-    /// </summary>
-    /// <param name="modifiers"></param>
-    /// <param name="stackDelta"></param>
-    /// <param name="isRefresh"></param>
-    private void ApplyModifier(AttrModifierTpl[] modifiers, int stackDelta, bool isRefresh = true)
-    {
-        // apply the same modifiers for stackDelta times
-        foreach (AttrModifierTpl _modifier in modifiers)
-        {
-            for (int i = 0; i < stackDelta; ++i)
-            {
-                taker.TakeModifier(new SAttrModifier( _modifier, _modifier., false);
+                taker.TakeModifier(modifiers[j].Actual, modifiers[j].AttrModifier.AttrType, modifiers[j].AttrModifier.Layer, false);
             }
         }
 
-        if (isRefresh) taker.RefreshAll(true);
+        // refresh
+        taker.RefreshAll();
     }
 
-
-    /// <summary>
-    /// Remove certain stacks of modifiers with/out refreshing attributes.
-    /// </summary>
-    /// <param name="modifiers"></param>
-    /// <param name="stackDelta"></param>
-    /// <param name="isRefresh"></param>
-    private void RemoveModifier(AttrModifierTpl[] modifiers, int stackDelta, bool isRefresh = true)
+    private void RemoveAll(int stack)
     {
-        // remove the same modifiers for stackDelta times
-        foreach (AttrModifierTpl _modifier in modifiers)
+        for (int i = 0; i < stack; ++i)
         {
-            for (int i = 0; i < stackDelta; ++i)
+            for (int j = 0; j < modifiers.Length; ++j)
             {
-                taker.RemoveModifier(_modifier, false);
+                taker.RemoveModifier(modifiers[j].Actual, modifiers[j].AttrModifier.AttrType, modifiers[j].AttrModifier.Layer, false);
             }
         }
 
-        if (isRefresh) taker.RefreshAll(true);
+        // refresh
+        taker.RefreshAll();
     }
-
 
     private class ActualModifier
     {

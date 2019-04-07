@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class Attribute : IAttribute
 {
-    private AttrBoundaryTpl preset;
+    private AttrPresetTpl preset;
     private static readonly int indSize = 2;
     private bool isModDirty;
     // caches of modifiers ordered by enum
@@ -19,13 +19,14 @@ public class Attribute : IAttribute
 
     public float ActualValue => actualValue;
 
-    public Attribute(AttrBoundaryTpl preset, EAttrType type)
+    public Attribute(AttrPresetTpl preset, EAttrType type)
     {
         isModDirty = true;
         modifiers = new float[EnumArray.AttrModLayer.Length];
         independents = new List<float>(indSize);
         this.preset = preset;
 
+        // decide type of calculator
         switch (type)
         {
             case EAttrType.Vitality:
@@ -49,10 +50,10 @@ public class Attribute : IAttribute
     /// <param name="value"></param>
     /// <param name="layer"></param>
     /// <param name="attrType"></param>
-    public void TakeModifier(EAttrType attrType, EAttrModLayer layer, float value)
+    public void TakeModifier(float value, EAttrType type, EAttrModifierLayer layer, bool isRefresh = true)
     {
         // keep track of independent
-        if (layer == (int)EAttrModLayer.Independent)
+        if (layer == (int)EAttrModifierLayer.Independent)
         {
             independents.Add(value);
         }
@@ -63,6 +64,9 @@ public class Attribute : IAttribute
 
         // set dirty
         isModDirty = true;
+
+        // recalculate attribute
+        if (isRefresh) Recalculate(false);
     }
 
     /// <summary>
@@ -71,10 +75,10 @@ public class Attribute : IAttribute
     /// <param name="attrType"></param>
     /// <param name="layer"></param>
     /// <param name="value"></param>
-    public void RemoveModifier(EAttrType attrType, EAttrModLayer layer, float value)
+    public void RemoveModifier(float value, EAttrType type, EAttrModifierLayer layer, bool isRefresh = true)
     {
         // keep track of independent
-        if (layer == (int)EAttrModLayer.Independent)
+        if (layer == (int)EAttrModifierLayer.Independent)
         {
 
             independents.Remove(value);
@@ -86,6 +90,9 @@ public class Attribute : IAttribute
 
         // set dirty
         isModDirty = true;
+
+        // recalculate attribute
+        if (isRefresh) Recalculate(false);
     }
 
     /// <summary>
@@ -100,24 +107,24 @@ public class Attribute : IAttribute
         }
 
         // reset additive modifiers back to 0
-        modifiers[(int)EAttrModLayer.Additive] = 0;
+        modifiers[(int)EAttrModifierLayer.Additive] = 0;
 
         // reset list
         independents.Clear();
+
+        // set actual value to base
+        actualValue = preset.Initial;
     }
 
     /// <summary>
     /// Recalculate the actual value of this attribute.
     /// </summary>
-    public void Recalculate(bool isForced)
+    public void Recalculate(bool isForced = false)
     {
         // do not recalculate if not forced and not dirty
         if (!isForced && !isModDirty) return;
 
-        float _result = calculator.Recalculate(modifiers, independents, preset.Initial);
-
-        // range check
-        _result = Mathf.Max(Mathf.Min(_result, preset.Max), preset.Min);
+        Calculate();
 
         // reset dirty flag
         isModDirty = false;
@@ -130,7 +137,7 @@ public class Attribute : IAttribute
     private void NormalCalculate()
     {
         // get additive modification
-        float _additive = modifiers[(int)EAttrModLayer.Additive];
+        float _additive = modifiers[(int)EAttrModifierLayer.Additive];
 
         // recalculate caches of independent layer
         float _independent = 1;
@@ -138,13 +145,13 @@ public class Attribute : IAttribute
         {
             _independent *= independents[i];
         }
-        modifiers[(int)EAttrModLayer.Independent] = _independent;
+        modifiers[(int)EAttrModifierLayer.Independent] = _independent;
 
         // calculate multiplicative modification
         float _multiplicative = 1;
         for (int i = 0; i < modifiers.Length; ++i)
         {
-            if (i != (int)EAttrModLayer.Additive)
+            if (i != (int)EAttrModifierLayer.Additive)
             {
                 _multiplicative *= modifiers[i];
             }
@@ -154,20 +161,17 @@ public class Attribute : IAttribute
         float _result = (preset.Initial + _additive) * _multiplicative;
 
         // range check
-        _result = Mathf.Max(Mathf.Min(_result, preset.Max), preset.Min);
-
-        isModDirty = false;
+        actualValue = Mathf.Max(Mathf.Min(_result, preset.Max), preset.Min);
     }
 
     /// <summary>
     /// Calculate multiplicative modifiers in (1 - modifier) manner.
     /// For example, actual = (1 - base) * (1 - 0.5) * (1 - 0.1 - 0.2) 
     /// </summary>
-    /// <returns></returns>
     private void InverseCalculate()
     {
         // get additive modification
-        float _additive = modifiers[(int)EAttrModLayer.Additive];
+        float _additive = modifiers[(int)EAttrModifierLayer.Additive];
 
         // recalculate caches of independent layer
         float _independent = 1;
@@ -175,22 +179,23 @@ public class Attribute : IAttribute
         {
             _independent *= Mathf.Max(0, (1 - independents[i]));
         }
-        modifiers[(int)EAttrModLayer.Independent] = _independent;
+        modifiers[(int)EAttrModifierLayer.Independent] = _independent;
 
         // calculate multiplicative modification
         float _multiplicative = 1;
         for (int i = 0; i < modifiers.Length; ++i)
         {
-            if (i != (int)EAttrModLayer.Additive)
+            if (i != (int)EAttrModifierLayer.Additive)
             {
                 _multiplicative *= Mathf.Max(0, (1 - modifiers[i]));
             }
         }
 
         // calculate actual value
-        float _result = Mathf.Max(0, (1 - (initial + _additive)) * _multiplicative);
+        float _result = Mathf.Max(0, (1 - (preset.Initial + _additive)) * _multiplicative);
 
-        return 1 - _result;
+        // range check
+        actualValue = Mathf.Max(Mathf.Min(1 - _result, preset.Max), preset.Min);
     }
 
 

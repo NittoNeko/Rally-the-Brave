@@ -5,17 +5,17 @@ using UnityEngine;
 /// Data container for pre-defined attributes.
 /// </summary>
 [CreateAssetMenu(fileName = "AttributePreset", menuName = "ScriptableObject/AttributePreset")]
-public class SOAttrTpl : ScriptableObject
+public class SOAttrPresetTpl : ScriptableObject
 {
     [SerializeField, ListDrawerSettings(IsReadOnly = true, ListElementLabelName = "name", Expanded = true), InlineProperty]
     private AttrTplWrapper[] attrPresets;
 
-    public SOAttrTpl()
+    public SOAttrPresetTpl()
     {
         attrPresets = Initialize();
     }
 
-    public AttrBoundaryTpl GetAttrPreset(EAttrType type)
+    public AttrPresetTpl GetAttrPreset(EAttrType type)
     {
         return attrPresets[(int)type].AttrTpl;
     }
@@ -37,13 +37,13 @@ public class SOAttrTpl : ScriptableObject
         [SerializeField, HideInInspector]
         private string name;
         [SerializeField, InlineProperty]
-        private AttrBoundaryTpl attrTpl;
+        private AttrPresetTpl attrTpl;
 
         public AttrTplWrapper(string name)
         {
             this.name = name;
         }
 
-        public AttrBoundaryTpl AttrTpl { get => attrTpl; }
+        public AttrPresetTpl AttrTpl { get => attrTpl; }
     }
 }

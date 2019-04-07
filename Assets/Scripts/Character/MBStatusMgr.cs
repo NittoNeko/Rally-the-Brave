@@ -18,7 +18,7 @@ public class MBStatusMgr : MonoBehaviour, IStatusTaker
     public event StatusEvent OnStatusRemove;
 
     [SerializeField, Required("IAttrModifiable is missing.")]
-    private IAttrModifiable attrModifiable;
+    private IAttrModifierTaker attrModifiable;
 
     [SerializeField, Required("ICombater is missing.")]
     private ICombater combater;
@@ -27,12 +27,13 @@ public class MBStatusMgr : MonoBehaviour, IStatusTaker
     private bool isExpireDirty = false;
 
     /// <summary>
-    /// <see cref="IStatusTaker.TakeStatus(SOStatusTpl, MBAttrHolder, int, float)"/>
+    /// <see cref="IStatusTaker.TakeStatus(IStatus, MBAttrHolder, int, float)"/>
     /// </summary>
+    /// <param name="status"></param>
     /// <param name="sourceId"></param>
     /// <param name="stack"></param>
     /// <param name="timePercent"></param>
-    public bool TakeStatus(int sourceId, int stack = 1, float timePercent = 1)
+    public bool TakeStatus(IStatus status, int stack = 1, float timePercent = 1)
     {
         // dont apply if immune to debuff
         if (source.Type == EStatusType.Debuff &&

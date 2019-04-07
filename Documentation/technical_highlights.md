@@ -110,19 +110,28 @@ In TECT Components are very helpful to:
 
 ## Task
 
-Tasks are concrete and replaceable implementations of properties/behaviours,
-and they must be contained within Components.
-This means Tasks should always be bound to certain Components,
-and are only visible to those Components.
+Tasks are concrete implementations of properties/behaviours,
+and they must be contained within other contexts like Entities or Components.
+This means Tasks should always be bound to certain contexts,
+and are only visible to those contexts(parents).
 
 <a id="mapping"></a>
 ## Mapping from TECT to C\#
 
 To realize all these TECT conceptions,
 we must map them to C# conceptions:
-*	Interfaces represent functionalities.
+*	In a composition relationship,
+	parents refer to bigger pieces that contain other pieces,
+	and children refer to smaller pieces that are contained within other pieces.
+	Children might parents as well.
+*	In a delegatation relationship,
+	parents refer to the higher levels that delegate jobs downward,
+	and children refer to the lower levels that receive the jobs.
+	Children might be parents as well. 
+*	Functionalities are any methods visible to the public.
+	They should be always grouped by Interfaces.
 	*	However, Interfaces for Strategy Pattern are NOT counted as functionalities.
-		Because they are only visible to Components that contain them.
+		Because they are only visible to their parents.
 *	Tempaltes are represented by:
 	1.	Scriptable Objects and their assets/instances.
 	2.	Serializable C# classes that serve as parts of Scriptable Object.
@@ -130,16 +139,25 @@ we must map them to C# conceptions:
 *	Entities are represented by:
 	1.	GameObject Entities that are composed of MonoBehvaiour Components.
 		Such Entities are chosen when an object should be actually placed in game world, be visible to users and interact physically with others.
+		We usually use Transform to represent a GameObject Entity,
+		and use GetComponents<Interface> to retrieve the functionalities we are interested in.
 	2.	C# Entities that are composed of C# Components.
 		Such Entities are chosen when an Entity does not benefit from functionalities of GameObjects.
+		We usually use a single Interface that may be composed of other Interfaces to represent a C# Entity,
+		so we could know all the functionalitites by looking at its Interface composition. See <a href="#interface_segregation">details</a>.
+
 *	Components are represented by:
 	1.	MonoBehaviour Components that derive from MonoBehaviours
 		that allow them to directly interact with game worlds(Unity Engine).
+		They should be always encapsulated by Unity Engine methods or Interfaces.
 	2.	C# Components that derive from System.Object.
 		Such Components are usually contained within MonoBehaviour Components,
 		through which they are allowed to interact with game worlds indirctly.
+		They should always encapsulalted by Intefaces.
 *	Components are either encapsulated by Interfaces or MonoBehaviours. See <a href="#composition">details</a>.
-*	Tasks are represented by method groups, Strategies, Delegates and so on. (See <a href="#dynamic_task">details</a>.)
+*	Tasks are represented by method groups, Strategies, Delegates and so on,
+	and they should be only visible to their parents.
+	(See <a href="#dynamic_task">details</a>.)
 
 ## Cautions about GameObject/MonoBehaviour/ScriptableObject?
 
@@ -189,7 +207,8 @@ To achieve the maximum scalability and flexibility, instead of a fixed sequence 
 the implementations of Entities in TECT can be defined dynamically by data in Templates.
 Normally implementation branches are made with if/switch statements, but they are inflexible, hard to read and sometimes cause performance spikes in tight loops.
 Thus, we want to move the conditional checks from execution methods to initilization methods.
-I.e. implementations are decided at initialization and can be changed in runtime instead of if/switch branch statements.
+I.e. implementations are chosen at initialization and can be changed in runtime instead of if/switch branch statements.
+Not all Tasks need to be dynamic, since Tasks are only visible to their parents we could refactor them and make them dynamic on demand easily.
 
 There are several ways to achieve Dynamic Task in TECT, and each of them has its own use cases.
 1.	Delegate
@@ -255,14 +274,12 @@ This means at least three things:
 3.	Components can be reused across several Entities and Tasks can be reused across several Components.
 
 And...composition is basically a form of delegation.
-In TECT we could achieve composition by simply delegating the implementations of properties/behaviours/functionalities from the root down to the nodes and leaves,
-while following Single Responsibility Principle and Interface Segregation Principle.
+In TECT we could achieve composition by simply delegating the implementations of properties/behaviours/functionalities from the root down to the nodes and leaves.
 Here is the analog to a tree structure:
-*	Entities are the roots that delegate their jobs to other nodes.
-*	Components are the nodes that delegate jobs further down to other nodes.
-*	Static Tasks are the leaves that implement the jobs statically.
-*	Dynamic Tasks are the leaves that implement the jobs dynamically.
-*	Static Tasks can be converted to Dynamic Tasks.
+*	Entities are roots that delegate their jobs to other nodes.
+*	Components can be nodes that delegate jobs further down to other nodes.
+*	Components can be leaves that handle other Entities.
+*	Tasks are leaves that implement the jobs.
 *	If the delegation tree has gone too deep (more than 4 layers), 
 	it's time to introduce new Entities to flatten our structures.
 
@@ -275,23 +292,50 @@ and they are not suitable for Dynamic Tasks.
 
 But we do not have to go that deep in order to mimic Unity's MonoBehaviour for C# Entities.
 Since C# allows a class to implement multiple interfaces,
-we could simply map each functionality to one interface,
+we could simply map one interface to one or more functionalities,
 and delegate these functionalities/interfaces to Components that contain Tasks implementing those functionalities/interfaces.
+In addition, we could delegate a single functionality to multiple Components if necessary,
+but this need to be desinged carefully as it may lead to unexpected results.
 
-By the way, a C# Entity is also known as a parasitic Entity because it is living inside a MonoBehaviour Component of another GameObject Entity.
-As I've said in previous section, in order to interact with the game world we must put C# Entities inside MonoBehaviours,
-and let those MonoBehaviours invoke the functioanlities of the C# Entities.
-In such cases the parasitic Entity is delegating all its functionalities to that MonoBehaviour, 
-although the MonoBehaviour is not a part of the parasitic Entity.
-It is worth it to mention that once a GameObject Entity decides to hold such parasitic Entities through its MonoBehaviours,
-the GameObject Entity actually inherits all functionalities from the parasitic Entities.
+By the way, a C# Entity is also known as parasitic Entity because it must live inside a MonoBehaviour Component of another GameObject Entity.
+As I've said in previous section, in order to interact with the game world we must connnect C# Entities with Unity Engine
+so that C# Entities will get processed, and the most common connectors are MonoBehaviours.
+It is worth it to mention that once a GameObject Entity decides to deal with such parasitic Entities,
+the GameObject Entity must expose new functionalities(Interfaces) to adapt the parasitic Entities.
+I.e. the GameObject Entity creates new Components (encapsulated by Interfaces/Unity Engine) to handle those functionalities of those parasitic Entities.
 
 Double Dynamic happens when a Dynamic Task is further split into other Dynamic Tasks,
 which causes the former Dynamic Task losing its purposes.
-This problem is often caused by poor design of the project plan that makes properties/behaviours/functionalities unclear at first place.
+This problem is often caused by poor design that makes properties/behaviours/functionalities unclear at first place.
 There are two solutions for it:
 1.	Delegate some functionalities to the former Dynamic Task and make it a Component.
 2.	Flatten the tree structure by delete the former dynamic Task, and move its work to the latter Dynamic Tasks.
+
+<a id="interface_segregation"></a>
+## Interface Segregation
+
+The whole point of Interfaces is to make clients only dependent on the parts(functioanlities) they are interested in.
+
+But it's never easy to split functionalities into properly sized Interfaces to follow Single Responsibility Principle(SRP) and Interface Segregation Principle(ISP),
+especially when Components should be built on Interfaces.
+It would be too late to split functionalities AFTER we know what clients actually want.
+So we have to make good plans to predict clients' interests:
+1.	Create all Entities conceptually and list their properties/behaviours/functionalities before we create any Component/Task.
+2.	Figure out all potential interactions between all Entities.
+3.	Create one Interface for each kind of interaction.
+4.	Map one or more closely-related Interfaces to each Component.
+5.	For any missed requirements from clients, use Interface inheritance to compose a new one or split into new ones.
+
+For C# Entities, we would create comprehensive Interfaces composed of smaller Interfaces that represent all functionalities they hold.
+(Although we shouldn't do so for Components).
+The purpose behind the comprehensive Interfaces is to mimic the reflection/Service Locator Pattern 
+that GetComponent<Interface> or similar Unity methods have been utilizing.
+For example,
+*	StatusManager is a Component that stores and manages all Statuses on its parent character.
+*	Its jobs include processing Statuses as time passes, sending descriptions of Statuses to UI elements and so on.
+*	It has two options to store Statues: concrete classes Status or an Interface IStatus composed of all its functionalities.
+*	At this moment, the StatusManager is exactly the client that needs to know ALL functionalities of the Status class.
+*	When other clients need partial functionalities of the Status class, the StatusManager upcasts IStatus to something like IDescribable and return to them.
 
 ## Dependency Resolve
 
@@ -403,7 +447,7 @@ But, what does it do with Singleton Pattern?
 ## Odin Inspector
 
 Odin Inspector is crucial if we want Interfaces to be serialized in Unity.
-Otherwise we should forget about drag and drop, use GetComponent to retrieve what we want.
+Otherwise we should forget about drag and drop, use GetComponent<> or similar Unity methods to retrieve what we want.
 
 Be careful and follow the rules when using Odin Inspector:
 *	Don't add "readonly" to serialize field.

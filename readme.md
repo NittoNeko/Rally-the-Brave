@@ -41,6 +41,7 @@ Why deprecated?
 1.  I didn't have a full understanding of Entity Component System and Data Oriented Design.
 2.  This architecture isn't taking advantages of OOP nor DOD.
 3.  This architecture introduces large-scale resuability but causes small-scale duplicate codes.
+4.  Some features bring more problems than benefits.
 
 Click <a href="Documentation/deprecated.md">here</a>.
 

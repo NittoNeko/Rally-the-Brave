@@ -6,14 +6,14 @@ using System.Collections.Generic;
 /// - Set, reset and refresh attributes.
 /// - Apply attribute modifiers.
 /// </summary>
-public class MBAttrMgr : MonoBehaviour, IAttrModifiable, IAttrHolder
+public class MBAttrMgr : MonoBehaviour, IAttrModifierTaker, IAttrHolder
 {
     // triggered when an attribute changes
     public event AttrChange OnAttrChange;
 
     // fixed base, maximum and minimum attributes
     [SerializeField]
-    private SOAttrTpl attrPreset;
+    private SOAttrPresetTpl attrPreset;
 
     // attributes and their modifier
     private IAttribute[] attributes;
@@ -24,12 +24,10 @@ public class MBAttrMgr : MonoBehaviour, IAttrModifiable, IAttrHolder
         attributes = new Attribute[EnumArray.AttrType.Length];
         for (int i = 0; i < attributes.Length; ++i)
         {
-            attributes[i] = FAttribute.Create(attrPreset, (EAttrType)i);
+            EAttrType _type = (EAttrType)i;
+            attributes[i] = FAttribute.Create(attrPreset.GetAttrPreset(_type), _type);
         }
-        
-        
-
-
+       
         // get all attributes ready
         RefreshAll(true);
     }
@@ -45,36 +43,36 @@ public class MBAttrMgr : MonoBehaviour, IAttrModifiable, IAttrHolder
     }
 
     /// <summary>
-    /// <see cref="IAttrModifiable.TakeModifier(SAttrModifier, bool)"/>
+    /// <see cref="IAttrModifierTaker.TakeModifier(float, EAttrType, EAttrModifierLayer, bool)"/>
     /// </summary>
     /// <param name="layer"></param>
     /// <param name="type"></param>
     /// <param name="value"></param>
     /// <param name="isRefresh"></param>
-    public void TakeModifier(float value, EAttrType type, EAttrModLayer layer, bool isRefresh = true)
+    public void TakeModifier(float value, EAttrType type, EAttrModifierLayer layer, bool isRefresh = true)
     {
-        attributes[(int)modifier.attrType].TakeModifier(modifier);
-        if (isRefresh) RecalculateAttr(modifier.attrType);
+        attributes[(int)type].TakeModifier(value, type, layer, isRefresh);
+
+        if (isRefresh) RecalculateAttr(type);
     }
 
     /// <summary>
-    /// <see cref="IAttrModifiable.RemoveModifier(SAttrModifier, bool)"/>
+    /// <see cref="IAttrModifierTaker.RemoveModifier(float, EAttrType, EAttrModifierLayer, bool)"/>
     /// </summary>
     /// <param name="layer"></param>
     /// <param name="type"></param>
     /// <param name="value"></param>
     /// <param name="isRefresh"></param>
-    public void RemoveModifier(float value, EAttrType type, EAttrModLayer layer, bool isRefresh = true)
+    public void RemoveModifier(float value, EAttrType type, EAttrModifierLayer layer, bool isRefresh = true)
     {
-        attributes[(int)modifier.attrType].RemoveModifier(modifier);
-        if (isRefresh) RecalculateAttr(modifier.attrType);
+        attributes[(int)type].RemoveModifier(value, type, layer, isRefresh);
     }
 
     /// <summary>
-    /// <see cref="IAttrModifiable.RefreshAll(bool)"/>
+    /// <see cref="IAttrModifierTaker.RefreshAll(bool)"/>
     /// </summary>
     /// <param name="isDirtyOnly"
-    public void RefreshAll(bool isForced)
+    public void RefreshAll(bool isForced = false)
     {
         for (int i = 0; i < attributes.Length; ++i)
         {
@@ -83,7 +81,7 @@ public class MBAttrMgr : MonoBehaviour, IAttrModifiable, IAttrHolder
     }
 
     /// <summary>
-    /// <see cref="IAttrModifiable.ResetAll"/>
+    /// <see cref="IAttrModifierTaker.ResetAll"/>
     /// </summary>
     public void ResetAll()
     {

@@ -7,7 +7,7 @@ using UnityEngine;
 /// <summary>
 /// Modifier layers include multiplicative, additive and independent.
 /// </summary>
-public enum EAttrModLayer
+public enum EAttrModifierLayer
 {
     // independent is a special multiplicative that only timeses other multiplicative
     Independent, 

@@ -10,8 +10,8 @@ public static class EnumArray
     public static string[] AttrName { get; }
         = System.Enum.GetNames(typeof(EAttrType));
 
-    public static EAttrModLayer[] AttrModLayer { get; }
-        = System.Enum.GetValues(typeof(EAttrModLayer)) as EAttrModLayer[];
+    public static EAttrModifierLayer[] AttrModLayer { get; }
+        = System.Enum.GetValues(typeof(EAttrModifierLayer)) as EAttrModifierLayer[];
 
     public static ESpecialEffectType[] SpecialStatusType { get; }
     = System.Enum.GetValues(typeof(ESpecialEffectType)) as ESpecialEffectType[];

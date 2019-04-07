@@ -6,7 +6,7 @@ using UnityEngine;
 /// This templates defines initial, maximum and minimum value for an attribute with name.
 /// </summary>
 [System.Serializable]
-public class AttrBoundaryTpl
+public class AttrPresetTpl
 {
     [SerializeField]
     private float initial;

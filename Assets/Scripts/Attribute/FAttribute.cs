@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class FAttribute
 {
-    public static IAttribute Create(AttrBoundaryTpl attrPreset, EAttrType type)
+    public static IAttribute Create(AttrPresetTpl attrPreset, EAttrType type)
     {
         return new Attribute(attrPreset, type);
     }

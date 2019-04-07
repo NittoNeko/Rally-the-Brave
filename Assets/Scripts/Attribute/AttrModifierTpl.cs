@@ -7,7 +7,7 @@ using UnityEngine;
 public class AttrModifierTpl
 {
     [SerializeField]
-    private EAttrModLayer layer;
+    private EAttrModifierLayer layer;
     [SerializeField]
     private EAttrType attrType;
     [SerializeField]
@@ -15,7 +15,7 @@ public class AttrModifierTpl
     [SerializeField]
     private float minValue;
 
-    public EAttrModLayer Layer => layer;
+    public EAttrModifierLayer Layer => layer;
 
     public EAttrType AttrType => attrType;
 

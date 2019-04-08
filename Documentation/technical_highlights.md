@@ -4,7 +4,7 @@
 The basic design pattern behind this project is inspired by Object-Oriented Programming(OOP) Principles,
 Entity Component System(ECS), Interface-based Programming and Component-based Architecture.
 
-I spent several months on learning from those TECThniques,
+I spent several months on learning from those techniques,
 taking their benefits into my design,
 and experimenting with my personal project, Rally the Brave,
 and finally discovered an architecture called Template Entity Component Task Task(TECT).
@@ -34,7 +34,7 @@ I thought it would be the end to my jouney, but in fact it was just an incentive
 I found several serious problems with ETCB(if interested please visit it from the link in the front page),
 and Swarm Robotics is just much more intuitive, suitable for OOP(C#) and flexible.
 
-So, I came back to my initial coding style along with some souvenirs from each TECThniques.
+So, I came back to my initial coding style along with some souvenirs from each techniques.
 Hopefully, this archiTECTutre called Template Entity Component Task(TECT) would be my final habitat.
 
 ## Template Entity Component Task(TECT)
@@ -145,7 +145,6 @@ we must map them to C# conceptions:
 		Such Entities are chosen when an Entity does not benefit from functionalities of GameObjects.
 		We usually use a single Interface that may be composed of other Interfaces to represent a C# Entity,
 		so we could know all the functionalitites by looking at its Interface composition. See <a href="#interface_segregation">details</a>.
-
 *	Components are represented by:
 	1.	MonoBehaviour Components that derive from MonoBehaviours
 		that allow them to directly interact with game worlds(Unity Engine).
@@ -167,7 +166,7 @@ we must map them to C# conceptions:
 *	Even empty GameObjects that bahave like containers could incur costs if users are not careful, because:
 	*	changing parents' Transform can further change all children's Transform.
 	*	the more objects in hierarchy, slower the Unity Service Locator is.
-*	Unity Engine callbacks like Update are slow. See <a href="#gameobject_optimization">details</a>.
+*	Unity Engine callbacks like Update should be used sparingly. See <a href="#gameobject_optimization">details</a>.
 
 ## How to choose the right type of Templates?
 
@@ -495,7 +494,7 @@ Suffix:
 *	C# class: a class that does not inherits from Unity Engine classes.
 *	Unity Engine class: a class that inherits from Unity Engine classes.
 
-## Thanks to TECThniques
+## Thanks to techniques
 
 *	Component-based Architecture
 *	Entity Component System(ECS)

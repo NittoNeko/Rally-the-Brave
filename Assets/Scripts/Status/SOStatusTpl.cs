@@ -7,7 +7,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Status", menuName = "ScriptableObject/Status")]
 public class SOStatusTpl : ScriptableObject
 {
-    [SerializeField, InlineProperty]
+    [SerializeField, HideLabel]
     private StatusTpl statusTpl;
 
     public StatusTpl StatusTpl { get => statusTpl; }

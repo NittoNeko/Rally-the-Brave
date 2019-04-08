@@ -5,16 +5,6 @@ using UnityEngine;
 
 public class MBDespawnMgr : MonoBehaviour, IDespawnable
 {
-    // global settings
-    private SOGlobalSetting globalSetting;
-
-
-    [Zenject.Inject]
-    private void Construct(SOGlobalSetting globalSetting)
-    {
-        this.globalSetting = globalSetting;
-    }
-
     public void Remove()
     {
 

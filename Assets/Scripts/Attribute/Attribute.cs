@@ -19,29 +19,15 @@ public class Attribute : IAttribute
 
     public float ActualValue => actualValue;
 
-    public Attribute(AttrPresetTpl preset, EAttrType type)
+    public Attribute(AttrPresetTpl preset, bool isCalculationInversed)
     {
         isModDirty = true;
         modifiers = new float[EnumArray.AttrModLayer.Length];
         independents = new List<float>(indSize);
+
         this.preset = preset;
 
-        // decide type of calculator
-        switch (type)
-        {
-            case EAttrType.Vitality:
-            case EAttrType.Spirit:
-            case EAttrType.Attack:
-            case EAttrType.CritRate:
-            case EAttrType.MoveSpeed:
-            case EAttrType.CritMult:
-                Calculate = NormalCalculate;
-                break;
-            case EAttrType.Dodge:
-            case EAttrType.Armor:
-                Calculate = InverseCalculate;
-                break;
-        }
+        Calculate = isCalculationInversed ? (System.Action)InverseCalculate : NormalCalculate;
     }
 
     /// <summary>

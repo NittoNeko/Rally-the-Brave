@@ -33,7 +33,6 @@ public class Test : MonoBehaviour
         //    t += attr[i].NT;
         //}
 
-        dsa
     }
 
     public void testSpeed()

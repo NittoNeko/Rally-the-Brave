@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "AttributeMultiplePreset", menuName = "ScriptableObject/AttributeMultiplePreset")]
-public class SOAttrMultipleTpl : ScriptableObject
+[CreateAssetMenu(fileName = "CombatResourceMultiple", menuName = "ScriptableObject/CombatResourceMultiple")]
+public class SOCombatResourceMultipleTpl : ScriptableObject
 {
     // how is vitality converted
     [SerializeField, MinValue(0)]

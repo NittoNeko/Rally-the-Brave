@@ -32,11 +32,12 @@ public class SOAttrPresetTpl : ScriptableObject
         return temp;
     }
 
+    [System.Serializable]
     private class AttrTplWrapper
     {
         [SerializeField, HideInInspector]
         private string name;
-        [SerializeField, InlineProperty]
+        [SerializeField, HideLabel]
         private AttrPresetTpl attrTpl;
 
         public AttrTplWrapper(string name)

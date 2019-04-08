@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IStatusStackable
 {
-    void OnStackChange(int current);
+    int Stack { get; set; }
 }

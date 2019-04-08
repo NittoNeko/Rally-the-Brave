@@ -31,10 +31,45 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: d209e58ce2d81304da7af575beb4e8f5, type: 3}
-    totalSpriteSurfaceArea: 262144
+    totalSpriteSurfaceArea: 271104
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
+  - {fileID: 21300002, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300000, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300006, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300004, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300010, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300008, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300014, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300012, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300018, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300016, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300020, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300022, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300024, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300026, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300028, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300030, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300032, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300034, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300036, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300068, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300038, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300058, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300064, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300056, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300066, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300060, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300062, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300042, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300040, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300046, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300044, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300050, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300048, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300054, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
+  - {fileID: 21300052, guid: 1c3afb36c8dbf124f9e1e54ad3fbe1dd, type: 3}
   - {fileID: 21300016, guid: bb3d702813f671d47983b4e536616022, type: 3}
   - {fileID: 21300018, guid: bb3d702813f671d47983b4e536616022, type: 3}
   - {fileID: 21300012, guid: bb3d702813f671d47983b4e536616022, type: 3}
@@ -52,6 +87,41 @@ SpriteAtlas:
   - {fileID: 21300026, guid: bb3d702813f671d47983b4e536616022, type: 3}
   - {fileID: 21300024, guid: bb3d702813f671d47983b4e536616022, type: 3}
   m_PackedSpriteNamesToIndex:
+  - ForestTile_1
+  - ForestTile_0
+  - ForestTile_3
+  - ForestTile_2
+  - ForestTile_5
+  - ForestTile_4
+  - ForestTile_7
+  - ForestTile_6
+  - ForestTile_9
+  - ForestTile_8
+  - ForestTile_10
+  - ForestTile_11
+  - ForestTile_12
+  - ForestTile_13
+  - ForestTile_14
+  - ForestTile_15
+  - ForestTile_16
+  - ForestTile_17
+  - ForestTile_18
+  - ForestTile_34
+  - ForestTile_19
+  - ForestTile_29
+  - ForestTile_32
+  - ForestTile_28
+  - ForestTile_33
+  - ForestTile_30
+  - ForestTile_31
+  - ForestTile_21
+  - ForestTile_20
+  - ForestTile_23
+  - ForestTile_22
+  - ForestTile_25
+  - ForestTile_24
+  - ForestTile_27
+  - ForestTile_26
   - StoneGround_8
   - StoneGround_9
   - StoneGround_6

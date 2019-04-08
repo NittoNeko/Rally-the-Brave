@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class AttrModifierEffect : IAttrModifierEffect
+public class AttrModifierEffect : IStatusStackable
 {
     private ActualModifier[] modifiers;
     private IAttrModifierTaker taker;
@@ -19,23 +17,32 @@ public class AttrModifierEffect : IAttrModifierEffect
         this.stack = 0;
     }
 
-    public void OnStackChange(int stack)
-    {
-        int _delta = stack - this.stack;
+    public int Stack { get => stack;
+        set
+        {
+            int _delta = value - this.stack;
 
-        // add modifier if positive
-        if (_delta > 0)
-        {
-            ApplyAll(_delta);
-        } else if (_delta < 0)
-        {
-            RemoveAll(Mathf.Abs(_delta));
+            // add modifier if positive
+            if (_delta > 0)
+            {
+                ApplyAll(_delta);
+            }
+            else if (_delta < 0)
+            {
+                RemoveAll(Mathf.Abs(_delta));
+            }
+
+            this.stack = value;
         }
     }
 
-    private void ApplyAll(int stack)
+    /// <summary>
+    /// Apply all modifiers for delta stacks.
+    /// </summary>
+    /// <param name="delta"></param>
+    private void ApplyAll(int delta)
     {
-        for (int i = 0; i < stack; ++i)
+        for (int i = 0; i < delta; ++i)
         {
             for (int j = 0; j < modifiers.Length; ++j)
             {
@@ -47,9 +54,13 @@ public class AttrModifierEffect : IAttrModifierEffect
         taker.RefreshAll();
     }
 
-    private void RemoveAll(int stack)
+    /// <summary>
+    /// Remove all modifiers for delta stacks.
+    /// </summary>
+    /// <param name="delta"></param>
+    private void RemoveAll(int delta)
     {
-        for (int i = 0; i < stack; ++i)
+        for (int i = 0; i < delta; ++i)
         {
             for (int j = 0; j < modifiers.Length; ++j)
             {

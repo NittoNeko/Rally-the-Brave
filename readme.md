@@ -1,4 +1,5 @@
-# Not finished yet, still in development
+# Still in development.
+# See Technical Hightlights for interesting readings.
 
 ## Overview
 
@@ -15,13 +16,8 @@ In order to fulfill your curiosity, levels are randomly generated and as you go 
 the world becomes more challenging. In the same time, players empower themselves with legendary spells, mystic equipments
 and cursed but awesome souls to face their indefinite fate.
 
-<a id="manual"></a>
-## Manual
-
-Click <a href="Documentation/manual.md">here</a>.
-
 <a id="technical_highlights"></a>
-## Technical Highlights
+## Architecture and Design
 
 Click <a href="Documentation/technical_highlights.md">here</a>.
 
@@ -46,11 +42,8 @@ Why deprecated?
 Click <a href="Documentation/deprecated.md">here</a>.
 
 ## Notice
-
-This is an experimental project, through which I'm training myself for game development, 
-getting familar with game programming and preparing myslef for job application.
     
-With that said, this project is still in development and the progress is fairly slow
+This project is still in development and the progress is fairly slow
 because I'd like to try different coding styles, architecture designs and data structures,
 in order to find the most effective way of coding in game development.
     

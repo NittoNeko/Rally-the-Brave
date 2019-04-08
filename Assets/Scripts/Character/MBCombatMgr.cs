@@ -7,19 +7,16 @@ using UnityEngine;
 /// </summary>
 public class MBCombatMgr : SerializedMonoBehaviour, ICombater, ICombatRevivable
 {
-    public event HealthChange OnHealthChange;
-    public event ManaChange OnManaChange;
-    public event DamageEvent OnDamageTaken;
-    public event HealEvent OnHealTaken;
+    public event System.Action<float, float, float> OnHealthChange;
+    public event System.Action<float, float, float> OnManaChange;
+    public event System.Action<float> OnDamageTaken;
+    public event System.Action<float> OnHealTaken;
 
     [SerializeField, Required("SOAttrMultipleTpl is missing")]
-    private SOAttrMultipleTpl attrMultiple;
+    private SOCombatResourceMultipleTpl attrMultiple;
 
     [SerializeField, Required("IAttrHolder is missing.")]
     private IAttrHolder attrHolder;
-
-    [SerializeField, Required("IStatusTaker is missing.")]
-    private IStatusTaker statusTaker;
 
     [SerializeField, Required("IDespawnable is missing.")]
     private IDespawnable despawner;
@@ -126,10 +123,6 @@ public class MBCombatMgr : SerializedMonoBehaviour, ICombater, ICombatRevivable
     {
         // return 0 if dead
         if (!IsAlive) return 0;
-
-        // do not take damage if immortal
-        if (canImmune && statusTaker.ExistSpecialStatus(ESpecialEffectType.Immortal))
-            return 0;
 
         // avoid damage if dodge
         if (canDodge && RNG.IsHit(attrHolder.GetAttr(EAttrType.Dodge)))

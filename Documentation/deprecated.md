@@ -341,27 +341,6 @@ In ETCB, Event Aggregator = Zenject(Singleton) + Delegate + Interface + Observer
 4.	Even as ETCB's father I am still feeling a little bit resistance against ETCB, beacuse I actually come from an OOP background. 
 	But old principles are not always gonna be obeyed, and no rules are ever suitable for everyone.
 
-
-## Name Convention
-
-Prefix:
-*	"MB" means it derives from MonoBehaviour.
-*	"SO" means it derives from Scriptable Object.
-*	"E" means it is an enum.
-*	"I" means it is an Interface.
-*	Otherwise it derives from System.Object.
-
-Suffix:
-*	"Mgr" means it is a Manager Behaviour.
-*	"Sys" means it is a System Behaviour.
-*	"Tpl" means it is a Template.
-*	No suffix in most time means it is a data Container or non-GameObject Entity.
-*	Rest of the time it may be:
-	1.	a non-serializable data strucutre class.
-	2.	a utility class.
-	3.	a Wrapper class, and so on.
-
-
 ## Glossary
 
 *	Domino Effect: one change causes another change, which causes further changes.

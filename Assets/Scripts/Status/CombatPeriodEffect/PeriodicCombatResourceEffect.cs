@@ -8,7 +8,7 @@ using UnityEngine;
 /// Effect that happens periodically and affects combater. 
 /// This effect changes with taker and applier in real time.
 /// </summary>
-public class PeriodicCombatResourceEffect : IPeriodicCombatResourceEffect
+public class PeriodicCombatResourceEffect : IStatusStackable, IStatusUpdatable
 {
     private TimedEffect[] effects;
     private IAttrHolder applierAttr;
@@ -16,9 +16,10 @@ public class PeriodicCombatResourceEffect : IPeriodicCombatResourceEffect
     private int stack;
     private Func<PeriodicCombatResourceEffectTpl, float> GetAttrLinkedPower;
 
+    public int Stack { get => stack; set => stack = value; }
+
     public PeriodicCombatResourceEffect(PeriodicCombatResourceEffectTpl[] source, ICombater taker, IAttrHolder applierAttr, bool isAttrLinked)
     {
-
         this.effects = new TimedEffect[source.Length];
         for (int i = 0; i < source.Length; ++i)
         {
@@ -29,15 +30,6 @@ public class PeriodicCombatResourceEffect : IPeriodicCombatResourceEffect
         GetAttrLinkedPower = isAttrLinked ? (x) => { return 0; } : (Func<PeriodicCombatResourceEffectTpl, float>) CalculateLinked;
         this.taker = taker;
         this.applierAttr = applierAttr;
-    }
-
-    /// <summary>
-    /// <see cref="IStatusStackable.OnStackChange(int)"/>
-    /// </summary>
-    /// <param name="stack"></param>
-    public void OnStackChange(int stack)
-    {
-        this.stack = Mathf.Max(stack, 0);
     }
 
     /// <summary>

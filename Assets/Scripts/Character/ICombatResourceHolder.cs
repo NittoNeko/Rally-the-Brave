@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public delegate void HealthChange(float previous, float current, float max);
-public delegate void ManaChange(float previous, float current, float max);
-
-
 public interface ICombatHolder
 {
-    // triggered when health changes
-    event HealthChange OnHealthChange;
+    /// <summary>
+    /// Triggered when health changes.
+    /// Parameters: Previous Health, Current Health, MaxHealth.
+    /// </summary>
+    event System.Action<float, float, float> OnHealthChange;
 
-    // triggered when mana changes
-    event ManaChange OnManaChange;
+    /// <summary>
+    /// Triggered when health changes.
+    /// Parameters: Previous Mana, Current Mana, MaxMana.
+    /// </summary>
+    event System.Action<float, float, float> OnManaChange;
 
     float Health { get; }
     float Mana { get; }

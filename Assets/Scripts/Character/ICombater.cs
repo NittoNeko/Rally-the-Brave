@@ -7,10 +7,16 @@ using UnityEngine;
 /// </summary>
 public interface ICombater : ICombatHolder
 {
-    // triggered upon taking damage
+    /// <summary>
+    /// Triggered upon taking damage.
+    /// Parameters: Actual Damage Taken.
+    /// </summary>
     event System.Action<float> OnDamageTaken;
 
-    // triggered upon taking healing
+    /// <summary>
+    /// Triggered upon taking damage.
+    /// Parameters: Actual Healing Taken.
+    /// </summary>
     event System.Action<float> OnHealTaken;
 
     /// <summary>

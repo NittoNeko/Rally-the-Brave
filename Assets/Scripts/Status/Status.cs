@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using System;
 
 public class Status : IStatus
 {
@@ -10,23 +11,20 @@ public class Status : IStatus
     private int stack;
     private float remainTime;
     private bool isExpired;
-    private IPeriodicCombatResourceEffect combatPeriodEffect;
+    private IStatusTaker statusTaker;
+    private IStatusUpdatable[] statusUpdatables;
+    private IStatusStackable[] statusStackables;
+    private System.Action Updater;
+
+    public event Action OnExpire;
+
+    public int SourceId { get => sourceId; }
+
+    public EStatusType Type { get => statusTpl.Type; }
 
     public bool IsExpired => isExpired;
 
-    public int Stack
-    {
-        get => stack;
-        set
-        {
-            int _previous = stack;
-            stack = Mathf.Max(Mathf.Min(value, statusTpl.MaxStack), 0);
-            if (_previous != stack)
-            {
-                OnStackChange();
-            }
-        }
-    }
+    public bool IsRemovable => statusTpl.IsRemovable;
 
     public float RemainTime
     {
@@ -34,80 +32,93 @@ public class Status : IStatus
         set
         {
             remainTime = (int)Mathf.Max(Mathf.Min(value, statusTpl.MaxTime), 0);
+
+            // check expired
+            if (remainTime == 0)
+            {
+                SetExpired();
+            }
         }
     }
 
-    public int SourceId { get => sourceId; }
-
-    public EStatusType Type { get => statusTpl.Type; }
-
-    public void SetExpired()
+    public int Stack
     {
-        isExpired = true;
-    }
-    
-    public void OnStackChange()
-    {
-        combatPeriodEffect.OnStackChange(stack);
-    }
+        get => stack;
+        set
+        {
+            // range check
+            stack = Mathf.Max(Mathf.Min(value, statusTpl.MaxStack), 0);
 
-    public void OnApply()
-    {
+            // delegate downward
+            for (int i = 0; i < statusUpdatables.Length; ++i)
+            {
+                statusStackables[i].Stack = stack;
+            }
 
-    }
-
-    public void OnUpdate()
-    {
-        combatPeriodEffect.OnUpdate();
+            // check expired
+            if (stack == 0)
+            {
+                SetExpired();
+            }
+        }
     }
 
-    public void OnRemove()
+    public Status(StatusTpl statusTpl, int sourceId, IStatusUpdatable[] statusUpdatables, IStatusStackable[] statusStackables, int stack, float timePercent)
     {
+        this.statusTpl = statusTpl;
+        this.sourceId = sourceId;
+        this.statusUpdatables = statusUpdatables;
+        this.statusStackables = statusStackables;
+        this.RemainTime = timePercent * statusTpl.InitialTime;
+
+        // leave this the last one as it informs others
+        this.Stack = stack;
+        this.Updater = UpdateAll;
 
     }
 
     /// <summary>
-    /// Remove only effects of a status. 
-    /// Do not set the status expired.
-    /// Do not remove this status from list.
+    /// <see cref="IStatus.RemainTime"/>
     /// </summary>
-    private void RemoveStatusEffect(Status status, int stack)
+    public void RefreshTime()
     {
-        // make sure stack is 0 or positive
-        int _stack = Mathf.Max(stack, 0);
-        // stack before minus
-        int _stackDelta = status.Stack;
-        // remaining stack
-        status.Stack = _stack == 0 ? 0 : status.Stack - _stack;
-        // stack changed
-        _stackDelta -= status.Stack;
-        // remove certain stacks of attribute modifier
-        RemoveModifier(status.Source.AttrModifiers, _stackDelta);
-
-        // decrease stack caches if stack actually changed and stack is zero
-        if (status.Stack == 0 && _stackDelta > 0)
-        {
-            // remove status completely if 0 stack
-            DecrementSpecialStatus(status);
-        }
+        RemainTime += statusTpl.InitialTime;
     }
 
-    public static class Factory
+    /// <summary>
+    /// <see cref="IStatus.SetExpired"/>
+    /// </summary>
+    public void SetExpired()
     {
-        public static IStatus Create(SOStatusTpl source, 
-            IPeriodicCombatResourceEffect combatPeriodEffect,
-            int stack = 1, float timePercent = 1)
+        // make sure stack is 0 so that effects are gone
+        if (Stack != 0)
         {
-            Status _status = new Status();
-            // use default effect if null
-            _status.combatPeriodEffect = combatPeriodEffect;
-            _status.statusTpl = source.StatusTpl;
-            
-            _status.sourceId = source.GetInstanceID();
-            _status.stack = stack;
-            _status.RemainTime = _status.statusTpl.MaxTime * timePercent;
+            Stack -= Stack;
+        }
 
-            return _status;
+        // set flag true
+        isExpired = true;
+
+        // inform anyone intersted in this status expired
+        OnExpire();
+
+        // set update to null
+        Updater = () => { };
+    }
+
+    public void OnUpdate()
+    {
+        Updater();
+    }
+
+    /// <summary>
+    /// Delegate frame updates downward.
+    /// </summary>
+    private void UpdateAll()
+    {
+        for (int i = 0; i < statusUpdatables.Length; ++i)
+        {
+            statusUpdatables[i].OnUpdate();
         }
     }
 }

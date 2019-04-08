@@ -239,23 +239,6 @@ To put it more concrete, a game is considered as a program that receives inputs 
 Designers tell the program how to build the game world through Templates,
 and players interact with the game world by entering all kinds of commands.
 
-Dynamic Task also works pretty well with Factory, Object Pool, Command and Null Object Patterns:
-*	Factory Pattern
-	*	A Factory receives inputs from Templates and initializes corresponding processing patterns.
-	*	It could expose a way for users to select implementations.
-	*	It could also hide the initialization from users.
-	*	It makes later changes easier.
-*	Object Pool
-	*	An Object Pool optimizes initialization of objects.
-	*	A Factory can be turned into an Object Pool without affecting other codes.
-*	Command Pattern
-	*	A Command wraps an implementation as an object.
-	*	It makes an operation executable from other domains, queueable and undoable.
-*	Null Object Pattern
-	*	One of the disadvantages of TECT is that we need to handle data existance in Templates,
-		and this is where Null Object Pattern kicks in.
-	*	Absent properties and behaviours are handled by default Null Object implementations.
-
 <a id="composition"></a>
 ## Composition
 
@@ -336,6 +319,31 @@ For example,
 *	It has two options to store Statues: concrete classes Status or an Interface IStatus composed of all its functionalities.
 *	At this moment, the StatusManager is exactly the client that needs to know ALL functionalities of the Status class.
 *	When other clients need partial functionalities of the Status class, the StatusManager upcasts IStatus to something like IDescribable and return to them.
+
+## Other techiniques
+
+*	Factory Pattern
+	*	A Factory receives inputs from Templates and initializes corresponding processing patterns.
+	*	Only Entities should be created through Factories.
+	*	Factories should handle the creation, intialization, validation and dependency injection of the whole Entities and their Components.
+	*	This implies that Components shouldn't be created outside Entities.
+*	Object Pool
+	*	An Object Pool optimizes initialization of objects.
+	*	A Factory can be turned into an Object Pool without affecting other codes.
+*	Command Pattern
+	*	A Command wraps an implementation as an object.
+	*	It makes an operation executable from other domains, queueable and undoable.
+*	Null Object Pattern
+	*	One of the disadvantages of TECT is that we need to handle data existance in Templates,
+		and this is where Null Object Pattern kicks in.
+	*	Absent properties and behaviours are handled by default Null Object implementations.
+		I.e. instead of checking null all the time, we mock a default Null Object and let it do nothing.
+*	Dynamic Tasks vs conditional checks
+	*	Dynamic Tasks and conditional checks can both control the flow of codes.
+	*	Persistent switches should be handled by Dynamic Tasks.
+	*	Frequently invoked functions(tight loops) should be handled by Dynamic Tasks.
+	*	Temporary switches should be handled by conditional checks.
+	*	Initialization(Factories) should be handled by conditional checks.
 
 ## Dependency Resolve
 
@@ -424,7 +432,7 @@ so instead we should have a great and comprehensive starting point to avoid cost
 	*	We need to handle data existance by checking array size, zero values and somtimes booleans.
 	*	This requires extra carefulness when initializing objects based on Templates.
 
-## Singleton by Zenject! (suspect)
+## Singleton by Zenject! (Reconsideration)
 
 Singleton pattern is powerful and necessary in game development,
 but how it is implemented is still controversial in Unity,

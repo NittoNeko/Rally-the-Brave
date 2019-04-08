@@ -49,7 +49,7 @@ The basic idea is:
 *	A functionality is what others can DO to an Entity.
 *	A Template predefines properties/behaviours of an Entity.
 *	A Task is a replaceable implementation of properties/behaviours.
-*	A Component is a functionality handler that holds Tempaltes and invokes Tasks.
+*	A Component is a functionality handler that holds Templates and invokes Tasks.
 *	An Entity is composed of Components.
 *	Entities are updated through Components.
 *	Players interact with the game world by entering inputs.
@@ -123,7 +123,7 @@ we must map them to C# conceptions:
 *	In a composition relationship,
 	parents refer to bigger pieces that contain other pieces,
 	and children refer to smaller pieces that are contained within other pieces.
-	Children might parents as well.
+	Children might be parents as well.
 *	In a delegatation relationship,
 	parents refer to the higher levels that delegate jobs downward,
 	and children refer to the lower levels that receive the jobs.
@@ -140,9 +140,9 @@ we must map them to C# conceptions:
 	1.	GameObject Entities that are composed of MonoBehvaiour Components.
 		Such Entities are chosen when an object should be actually placed in game world, be visible to users and interact physically with others.
 		We usually use Transform to represent a GameObject Entity,
-		and use GetComponents<Interface> to retrieve the functionalities we are interested in.
+		and use GetComponent<Interface> to retrieve the functionalities we are interested in.
 	2.	C# Entities that are composed of C# Components.
-		Such Entities are chosen when an Entity does not benefit from functionalities of GameObjects.
+		Such Entities are chosen when an Entity does not benefit from GameObjects.
 		We usually use a single Interface that may be composed of other Interfaces to represent a C# Entity,
 		so we could know all the functionalitites by looking at its Interface composition. See <a href="#interface_segregation">details</a>.
 *	Components are represented by:
@@ -188,7 +188,7 @@ Choose external databases because:
 In fact, due to some special optimizations, GameObject Entities and MonoBehaviour Components can be further classified into three types:
 1.	Autonomous Entities with Autonomous Components that independently utilize Unity Engine callbacks like Update.
 	Just like Swarm Robotics, they are managed in a decentralized manner.
-2.	System Entities with System Components, which aggregate hundreds, thousands of indentical Entities and manage them all together.
+2.	System Entities with System Components, which aggregate hundreds, thousands of indentical Proxy Entities and manage them all together.
 3.	Proxy Entities with Proxy Components that are often instantiated in a large scale and thus should be managed by System Entities.
 
 Here you may see the trade-off behind all these optimizations:
@@ -308,7 +308,7 @@ So we have to make good plans to predict clients' interests:
 4.	Map one or more closely-related Interfaces to each Component.
 5.	For any missed requirements from clients, use Interface inheritance to compose a new one or split into new ones.
 
-For C# Entities, we would create comprehensive Interfaces composed of smaller Interfaces that represent all functionalities they hold.
+For C# Entities, we would create comprehensive Interfaces composed of smaller Interfaces that represent all functionalities an Entity may hold.
 (Although we shouldn't do so for Components).
 The purpose behind the comprehensive Interfaces is to mimic the reflection/Service Locator Pattern 
 that GetComponent<Interface> or similar Unity methods have been utilizing.
@@ -317,6 +317,7 @@ For example,
 *	Its jobs include processing Statuses as time passes, sending descriptions of Statuses to UI elements and so on.
 *	It has two options to store Statues: concrete classes Status or an Interface IStatus composed of all its functionalities.
 *	At this moment, the StatusManager is exactly the client that needs to know ALL functionalities of the Status class.
+	So we are good to choose IStatus.
 *	When other clients need partial functionalities of the Status class, the StatusManager upcasts IStatus to something like IDescribable and return to them.
 
 ## Other techiniques

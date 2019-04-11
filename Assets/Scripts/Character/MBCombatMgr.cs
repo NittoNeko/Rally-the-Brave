@@ -5,20 +5,20 @@ using UnityEngine;
 /// <summary>
 /// Handle combat-related events like TakeDamage, OnDeath and so on.
 /// </summary>
-public class MBCombatMgr : SerializedMonoBehaviour, ICombater, ICombatRevivable
+public class MBCombatMgr : MonoBehaviour, ICombater, ICombatRevivable
 {
     public event System.Action<float, float, float> OnHealthChange;
     public event System.Action<float, float, float> OnManaChange;
     public event System.Action<float> OnDamageTaken;
     public event System.Action<float> OnHealTaken;
 
-    [SerializeField, Required("SOAttrMultipleTpl is missing")]
-    private SOCombatResourceMultipleTpl attrMultiple;
+    [SerializeField, Required("Combat Resource Multiple is missing")]
+    private SOCombatResourceMultipleTpl combatResourceMultiple;
 
-    [SerializeField, Required("IAttrHolder is missing.")]
+    [SerializeField]
+    private ECombaterFaction faction;
+
     private IAttrHolder attrHolder;
-
-    [SerializeField, Required("IDespawnable is missing.")]
     private IDespawnable despawner;
 
     // list of revive event listeners
@@ -90,6 +90,16 @@ public class MBCombatMgr : SerializedMonoBehaviour, ICombater, ICombatRevivable
 
     public bool IsAlive => isAlive;
 
+    public ECombaterFaction Faction => faction;
+
+    private void Awake()
+    {
+        attrHolder = GetComponent<IAttrHolder>();
+        despawner = GetComponent<IDespawnable>();
+
+        Reporter.ComponentMissingCheck(attrHolder);
+        Reporter.ComponentMissingCheck(despawner);
+    }
 
     private void OnEnable()
     {
@@ -284,11 +294,11 @@ public class MBCombatMgr : SerializedMonoBehaviour, ICombater, ICombatRevivable
     {
         if (type == EAttrType.Vitality)
         {
-            MaxHealth = current * attrMultiple.VitalityMultiple;
+            MaxHealth = current * combatResourceMultiple.VitalityMultiple;
         }
         else if (type == EAttrType.Spirit)
         {
-            MaxMana = current * attrMultiple.SpiritMultiple;
+            MaxMana = current * combatResourceMultiple.SpiritMultiple;
         }
     }
 }

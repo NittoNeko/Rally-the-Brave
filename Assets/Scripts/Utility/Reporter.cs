@@ -9,9 +9,12 @@ public static class Reporter
     /// Check whether components are missing on the same gameobjects.
     /// </summary>
     [System.Diagnostics.Conditional("DEBUG")]
-    public static void ComponentMissing(System.Type type)
+    public static void ComponentMissingCheck(object o)
     {
-        Debug.LogError("Component " + type + " is missing on this gameobject.");
+        if (o == null)
+        {
+            Debug.LogError("Component " + o.GetType() + " is missing on this gameobject.");
+        }
     }
 
 }

@@ -50,6 +50,6 @@ MonoBehaviour:
       min: 0
   - name: MoveSpeed
     attrTpl:
-      initial: 100
+      initial: 400
       max: 500
       min: 0

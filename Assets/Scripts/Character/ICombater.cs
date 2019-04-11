@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// Handle combat-related behaviors.
 /// </summary>
-public interface ICombater : ICombatHolder
+public interface ICombater : ICombatHolder, IFactionHolder
 {
     /// <summary>
     /// Triggered upon taking damage.

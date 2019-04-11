@@ -12,7 +12,7 @@ public class MBAttrMgr : MonoBehaviour, IAttrModifierTaker, IAttrHolder
     public event AttrChange OnAttrChange;
 
     // fixed base, maximum and minimum attributes
-    [SerializeField]
+    [SerializeField, Required("Attribute Preset is missing")]
     private SOAttrPresetTpl attrPreset;
 
     // attributes and their modifier
@@ -27,9 +27,12 @@ public class MBAttrMgr : MonoBehaviour, IAttrModifierTaker, IAttrHolder
             EAttrType _type = (EAttrType)i;
             attributes[i] = FAttribute.Create(attrPreset.GetAttrPreset(_type), _type);
         }
-       
-        // get all attributes ready
-        RefreshAll(true);
+    }
+
+    private void Start()
+    {
+        // get attributes ready
+        ResetAll();
     }
 
     /// <summary>

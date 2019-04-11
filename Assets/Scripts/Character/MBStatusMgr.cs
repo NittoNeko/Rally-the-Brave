@@ -8,10 +8,7 @@ public class MBStatusMgr : MonoBehaviour, IStatusTaker
     // lists of statuses that exist on this entity
     private List<IStatus> statuses;
 
-    [SerializeField, Required("IAttrModifiable is missing.")]
     private IAttrModifierTaker attrModifiable;
-
-    [SerializeField, Required("ICombater is missing.")]
     private ICombater combater;
 
     private System.Action Updater;
@@ -64,6 +61,12 @@ public class MBStatusMgr : MonoBehaviour, IStatusTaker
     {
         statuses = new List<IStatus>(10);
         Updater = NormalUpdate;
+
+        attrModifiable = GetComponent<IAttrModifierTaker>();
+        combater = GetComponent<ICombater>();
+
+        Reporter.ComponentMissingCheck(attrModifiable);
+        Reporter.ComponentMissingCheck(combater);
     }
 
     private void Update()

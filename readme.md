@@ -1,5 +1,5 @@
 # Still in development.
-# See Technical Hightlights for interesting readings.
+# See Architecture and Design for interesting readings.
 
 ## Overview
 

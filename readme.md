@@ -41,6 +41,13 @@ Why deprecated?
 
 Click <a href="Documentation/deprecated.md">here</a>.
 
+## AI
+
+I have setup a scene that demonstrates A* based pathifinding suppoerted by PolyNav.
+Initially, this plugin did not support Tilemap Collider, so I extended it to do so.
+
+See the link for a quick view: https://youtu.be/Q_aCPa_7_cg
+
 ## Notice
     
 This project is still in development and the progress is fairly slow

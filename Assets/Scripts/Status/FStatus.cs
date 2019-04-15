@@ -17,7 +17,7 @@ public static class FStatus
     /// <param name="stack"></param>
     /// <param name="timePercent"></param>
     /// <returns></returns>
-    public static IStatus CreateAndBind(SOStatusTpl template,
+    public static IStatus Create(SOStatusTpl template,
         IAttrModifierTaker attrModifierTaker,
         ICombater combatTaker,
         IAttrHolder applierAttr,
@@ -34,7 +34,7 @@ public static class FStatus
         // initialize combat resource effect processor
         if (combatTaker != null && _source.CombatPeriodEffects.Length != 0)
         {
-            PeriodicCombatResourceEffect _combatResourceEffect = new PeriodicCombatResourceEffect(_source.CombatPeriodEffects, combatTaker, applierAttr, applierAttr != null);
+            PeriodicCombatResourceEffect _combatResourceEffect = new PeriodicCombatResourceEffect(_source.CombatPeriodEffects, combatTaker, applierAttr, CombatResourceEffectExecutor.Instance);
             updatables.Add(_combatResourceEffect);
             stackables.Add(_combatResourceEffect);
         }

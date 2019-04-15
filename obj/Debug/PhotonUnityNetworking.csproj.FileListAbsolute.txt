@@ -318,4 +318,3 @@ D:\Unity Project\Rally the Brave\obj\Debug\PhotonUnityNetworking.csproj.CoreComp
 D:\Unity Project\Rally the Brave\obj\Debug\PhotonUnityNetworking.csproj.CopyComplete
 D:\Unity Project\Rally the Brave\obj\Debug\PhotonUnityNetworking.dll
 D:\Unity Project\Rally the Brave\obj\Debug\PhotonUnityNetworking.pdb
-D:\Unity Project\Rally the Brave\Temp\bin\Debug\Boo.Lang.dll

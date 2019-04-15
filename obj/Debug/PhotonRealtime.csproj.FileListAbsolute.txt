@@ -318,4 +318,3 @@ D:\Unity Project\Rally the Brave\obj\Debug\PhotonRealtime.csproj.CoreCompileInpu
 D:\Unity Project\Rally the Brave\obj\Debug\PhotonRealtime.csproj.CopyComplete
 D:\Unity Project\Rally the Brave\obj\Debug\PhotonRealtime.dll
 D:\Unity Project\Rally the Brave\obj\Debug\PhotonRealtime.pdb
-D:\Unity Project\Rally the Brave\Temp\bin\Debug\Boo.Lang.dll

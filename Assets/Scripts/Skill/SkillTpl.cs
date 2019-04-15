@@ -13,16 +13,10 @@ public class SkillTpl
     [SerializeField]
     private float manaCost;
     [SerializeField]
-    private SOStatusTpl[] selfStatus;
-    [SerializeField]
-    private AttrLinkTpl[] selfHealing;
-    [SerializeField]
-    private SkillCollisionTpl[] collisions;
+    private CombatResourceEffectTpl[] directEffects;
 
     public string Description { get => description; }
     public float Cooldown { get => cooldown; }
     public float ManaCost { get => manaCost;}
-    public SOStatusTpl[] SelfStatus { get => selfStatus;  }
-    public AttrLinkTpl[] SelfHealing { get => selfHealing;  }
-    public SkillCollisionTpl[] Collisions { get => collisions; }
+    public CombatResourceEffectTpl[] DirectEffects { get => directEffects; }
 }

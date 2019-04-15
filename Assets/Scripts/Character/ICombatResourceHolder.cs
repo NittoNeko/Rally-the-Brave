@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ICombatHolder
+public interface ICombatResourceHolder
 {
     /// <summary>
     /// Triggered when health changes.

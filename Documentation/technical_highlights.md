@@ -86,7 +86,8 @@ Templates refer to shared data structures with unique instances/assets
 that are predefined outside runtime and read-only during life-time,
 and represent the properties/behaviours of Entitiies.
 In order to compose different Entities with the same Templates,
-The existance or absence of certain properties/behaviours must be designed and processed carefully. See <a href="#dynamic_behaviour">details</a>.
+The existance or absence of certain properties/behaviours must be designed and processed carefully.
+See <a href="#template_pattern">details</a>.
 
 ## Entity
 
@@ -114,6 +115,7 @@ Tasks are concrete implementations of properties/behaviours,
 and they must be contained within other contexts like Entities or Components.
 This means Tasks should always be bound to certain contexts,
 and are only visible to those contexts(parents).
+See <a href="#dynamic_behaviour">details</a>.
 
 <a id="mapping"></a>
 ## Mapping from TECT to C\#
@@ -133,9 +135,10 @@ we must map them to C# conceptions:
 	*	However, Interfaces for Strategy Pattern are NOT counted as functionalities.
 		Because they are only visible to their parents.
 *	Tempaltes are represented by:
-	1.	Scriptable Objects and their assets/instances.
-	2.	Serializable C# classes that serve as parts of Scriptable Object.
-	3.	External data containers like database.
+	1.	Prefabs.
+	2.	Scriptable Objects and their assets/instances.
+	3.	Serializable C# classes that serve as parts of Scriptable Object.
+	4.	External data containers like database.
 *	Entities are represented by:
 	1.	GameObject Entities that are composed of MonoBehvaiour Components.
 		Such Entities are chosen when an object should be actually placed in game world, be visible to users and interact physically with others.
@@ -170,17 +173,27 @@ we must map them to C# conceptions:
 
 ## How to choose the right type of Templates?
 
+Choose Prefabs because:
+*	this is how we deals with the game worlds and the Unity Engine.
+*	they can save Entities directly.
+*	they can save the combinations of Components/Tasks/Templates.
+*	they can be adjusted easily in the inspector,
+	so designers and artists don't have to understand programming in order to manipulate Prefabs.
+
 Choose ScriptableObjects because:
 *	they are designed to store pre-defined, unique and immutable data.
 *	their assets are stable and independent instances throughout the whole project, which avoids duplicate data and saves memory.
-*	they assets can be adjusted easily in the inspector just like a prefab,
+*	their assets can be adjusted easily in the inspector,
 	so designers and artists don't have to understand programming in order to manipulate SctiptableObject assets.
 *	they can be referred by fields/variables in scritpts.
+*	they are cheaper and lighter than Prefabs.
 
 Choose external databases because:
 *	they store and modify persistent user data on disk.
 *	they restore data from disk next time the app is open.
 *	they are "external" so that players can make their own Mods.
+
+
 
 <a id="gameobject_optimization"></a>
 ## Optimization about Entities and Components
@@ -202,9 +215,10 @@ Here you may see the trade-off behind all these optimizations:
 <a id="dynamic_task"></a>
 ## Dynamic Task
 
-To achieve the maximum scalability and flexibility, instead of a fixed sequence of codes(Static Task),
-the implementations of Entities in TECT can be defined dynamically by data in Templates.
-Normally implementation branches are made with if/switch statements, but they are inflexible, hard to read and sometimes cause performance spikes in tight loops.
+To achieve the maximum scalability and flexibility, instead of a fixed sequence of code(Static Task),
+the implementations of properties/behaviours/functionalities in TECT should be defined and chosen dynamically at runtime.
+
+Normally implementation branches are made with if/switch statements, but as the number increases they become inflexible, hard to read and sometimes cause performance spikes in tight loops.
 Thus, we want to move the conditional checks from execution methods to initilization methods.
 I.e. implementations are chosen at initialization and can be changed in runtime instead of if/switch branch statements.
 Not all Tasks need to be dynamic, since Tasks are only visible to their parents we could refactor them and make them dynamic on demand easily.
@@ -231,12 +245,6 @@ There are several ways to achieve Dynamic Task in TECT, and each of them has its
 	*	Swapped MonoBehaviours should keep functionalities unchanged.
 	*	This could be more expensive and prone to errors than other approaches
 		since any MonoBehaviour can be syntactically replaced with any MonoBehaviour.
-
-The basic ideas of Dynamic Tasks are taken from Data Driven Programming,
-where Templates are considered as input data and implementations will match the pattern with them.
-To put it more concrete, a game is considered as a program that receives inputs from two parties: designers and players.
-Designers tell the program how to build the game world through Templates,
-and players interact with the game world by entering all kinds of commands.
 
 <a id="composition"></a>
 ## Composition
@@ -293,6 +301,30 @@ There are two solutions for it:
 1.	Delegate some functionalities to the former Dynamic Task and make it a Component.
 2.	Flatten the tree structure by delete the former dynamic Task, and move its work to the latter Dynamic Tasks.
 
+<a id="template_pattern"></a>
+## Template and Processing Pattern
+
+TECT is following the Data Driven Programming,
+and the basic idea behind it is to select processing patterns dynamically based on inputs(data).
+So far all the concepts (Dynamic Task and Delegation) we have introduced are exactly serving for the same purpose.
+
+In TECT game players are not the only parties that enter inputs,
+Entities(or its Components) receive data from two sides:
+1.	game designers who build the game worlds by entering data in the Templates.
+	Such inputs will define most of processing patterns in the game worlds.
+2.	game players who interact with the game worlds by entering the hardware instructions.
+	Such inputs usually change the states of Entities, and sometimes help to define the rest of processing patterns.
+
+And this is also why TECT suggests to create Templates first:
+it allows us to define and organize Components/Tasks easily,
+because most of the time we just need to match implementations with Templates.
+
+In addition when we find that a Template is holding too much non-generic data,
+then it's time to extract those non-generic data and make them new Tempaltes and create new Components/Tasks to handle them.
+However one should be carefully when he/she is trying to separate concerns from a Template,
+as this would make old references broken.
+This is generally evitable since it is actually caused by a poor plan/design.
+
 <a id="interface_segregation"></a>
 ## Interface Segregation
 
@@ -329,7 +361,7 @@ For example,
 	*	This implies that Components shouldn't be created outside Entities.
 *	Object Pool
 	*	An Object Pool optimizes initialization of objects.
-	*	A Factory can be turned into an Object Pool without affecting other codes.
+	*	A Factory can be turned into an Object Pool without affecting other code.
 *	Command Pattern
 	*	A Command wraps an implementation as an object.
 	*	It makes an operation executable from other domains, queueable and undoable.
@@ -339,7 +371,7 @@ For example,
 	*	Absent properties and behaviours are handled by default Null Object implementations.
 		I.e. instead of checking null all the time, we mock a default Null Object and let it do nothing.
 *	Dynamic Tasks vs conditional checks
-	*	Dynamic Tasks and conditional checks can both control the flow of codes.
+	*	Dynamic Tasks and conditional checks can both control the flow of code.
 	*	Persistent switches should be handled by Dynamic Tasks.
 	*	Frequently invoked functions(tight loops) should be handled by Dynamic Tasks.
 	*	Temporary switches should be handled by conditional checks.
@@ -390,15 +422,15 @@ Polymorphic OCP basically agree that objects should be open to Underlying Change
 
 Now, it's time to talk about refactor and extension.
 As I said in previous sections, all features in TECT are aiming to make it easy
-to improve the codes during development(refactor) and modify/add/delete contents from our projects during maintenance(extension).
+to improve the code during development(refactor) and modify/add/delete contents from our projects during maintenance(extension).
 So here are some rules about refactor and extension:
 
-1.	Refactor codes once code smells like duplicate codes are deTECTted.
-2.	Always rewrite plans before rewriting codes due to any requirement changes.
+1.	Refactor code once code smells like duplicate code are deTECTted.
+2.	Always rewrite plans before rewriting code due to any requirement changes.
 3.	Utilize Dynamic Tasks as much as possible to adapt future changes.
 4.	For breaking changes to existing systems:
 	*	Find all related dependencies and predict potential influences on them.
-	*	Introduce new codes, deprecate old codes and migrate to new codes.
+	*	Introduce new code, deprecate old code and migrate to new code.
 		Factory combined with Interface makes this progress much easier.
 	*	Comprehensive plans made before this project started should reduce costs here.
 	*	Be REALLY REALLY REALLY careful.
@@ -410,7 +442,7 @@ Indeed, we cannot predict what our clients need in the future,
 sometimes we do not even know what our clients really want NOW.
 
 When people say that we should have a good insight into the future,
-they actually mean that we make our codes extensible enough in order to ACCEPT future changes.
+they actually mean that we make our code extensible enough in order to ACCEPT future changes.
 But I would like to interpret "good insight" as abilities to write a so comprehensive plan for projects
 so that we could REDUCE what we need to update in the futures.
 I.e. changes are always hard to deal with no matter how great your design is,

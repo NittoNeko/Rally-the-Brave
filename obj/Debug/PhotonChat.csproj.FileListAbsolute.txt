@@ -318,4 +318,3 @@ D:\Unity Project\Rally the Brave\obj\Debug\PhotonChat.csproj.CoreCompileInputs.c
 D:\Unity Project\Rally the Brave\obj\Debug\PhotonChat.csproj.CopyComplete
 D:\Unity Project\Rally the Brave\obj\Debug\PhotonChat.dll
 D:\Unity Project\Rally the Brave\obj\Debug\PhotonChat.pdb
-D:\Unity Project\Rally the Brave\Temp\bin\Debug\Boo.Lang.dll

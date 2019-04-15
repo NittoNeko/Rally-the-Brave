@@ -21,7 +21,6 @@ public class MBMobShootAndMove : MonoBehaviour
 
     private void Awake()
     {
-
         self = GetComponent<IFactionHolder>();
         agent = GetComponent<PolyNav.PolyNavAgent>();
         renderer = GetComponent<SpriteRenderer>();

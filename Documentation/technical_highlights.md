@@ -35,26 +35,26 @@ I found several serious problems with ETCB(if interested please visit it from th
 and Swarm Robotics is just much more intuitive, suitable for OOP(C#) and flexible.
 
 So, I came back to my initial coding style along with some souvenirs from each techniques.
-Hopefully, this archiTECTutre called Template Entity Component Task(TECT) would be my final habitat.
+Hopefully, this architecture called Template Entity Component Task(TECT) would be my final habitat.
 
 ## Template Entity Component Task(TECT)
 
-TECT is a hybrid archiTECTutre specialized in game development, 
+TECT is a hybrid architecture specialized in game development, 
 which classifies game elements in to four types: Template, Entity, Component and Task.
 
 The basic idea is:
 
 *	A property is what an Entity HAS.
 *	A behaviour is what an Entity DOES.
-*	A functionality is what others can DO to an Entity.
-*	A Template predefines properties/behaviours of an Entity.
-*	A Task is a replaceable implementation of properties/behaviours.
-*	A Component is a functionality handler that holds Templates and invokes Tasks.
-*	An Entity is composed of Components.
-*	Entities are updated through Components.
+*	A service is what an Entity PROVIDES to the public.
+*	A Template is predefined blueprint for an Entity.
+*	A Task is an implementation of a set of properties/behaviours/services.
+*	A Component is a worker that handles services of an Entity and invokes Tasks.
+*	An Entity is composed of Components and delegates jobs(mostly based on services) to them.
+*	A Component is composed of Tasks and delegates jobs to them.
 *	Players interact with the game world by entering inputs.
-*	Those inputs in turns trigger corresponding functionalities.
-*	This may further invoke other Entities' functionalities.
+*	Those inputs in turns trigger corresponding services.
+*	This may further invoke other Entities' services.
 *	Players perceive changes of Entities through graphic, UI elements and so on.
 
 ## Purporses
@@ -71,95 +71,70 @@ All the features that TECT has are made to achieve goals like:
 	*	what kind of game objects we need.
 	*	what kind of properties game objects may have.
 	*	what kind of behaviours game objects may have.
-	*	what kind of functionalities are required to make the game objects interactive.
+	*	what kind of services are required to make the game objects interactive.
 2.	According to Step 1, map those concepts to C#: 
-	*	create Templates based on properties/behaviours of game objects.
-	*	For each game object, we map its properties/behaviours/functionalities to several Components.
-	*	Create Tasks to realize these properties/behaviours.
+	*	create Templates for those game objects.
+	*	For each game object, we map its properties/behaviours/services to several Components.
+	*	Create Tasks to realize these properties/behaviours/services.
 	*	we put Components together to create Entities.
-	*	See <a href="#mapping">details</a>
 3.	Refactor and Extension. See <a href="#refactor_extension">details</a>.
 
 ## Template
 
-Templates refer to shared data structures with unique instances/assets
-that are predefined outside runtime and read-only during life-time,
-and represent the properties/behaviours of Entitiies.
-In order to compose different Entities with the same Templates,
-The existance or absence of certain properties/behaviours must be designed and processed carefully.
-See <a href="#template_pattern">details</a>.
+Templates are predefined blueprints that describe all kinds of aspects of an Entity.
+Most of time they represent partial properties/behaviour/services of Entitiies,
+and rest of the time they represent the whole Entity directly.
+
+Tempaltes are typically assets like:
+1.	Prefabs that can be instantiated as objects directly.
+2.	Scriptable Objects that generally contain read-only and shared data of Entities.
+3.	Serializable C# classes that serve as parts of Scriptable Object.
+4.	External data assets such as database.
 
 ## Entity
 
-An Entity is a conceptual identity of a game object that helps designers to build the game world.
-Game worlds are composed of Entities; Entities are composed of Components.
-All of these are achieved through composition and delegation. See <a href="#composition">details</a>.
+An Entity is a conceptual identity of a game object that helps designers to build the game world,
+and it is the high level element that players can see and interact with.
+However, Entities techinically do nothing but delegate jobs down to its Components. See <a href="#composition">details</a>.
+
+Entities are classified into two types:
+1.	GameObject Entities that are composed of MonoBehvaiour Components.
+	Such Entities are chosen when an object should be actually placed in game world, be visible to users and interact physically with others.
+	We usually let Transform represent GameObject Entities,
+	and use GetComponent<> to retrieve the services we are interested in.
+2.	C# Entities that are composed of C# Components.
+	Such Entities are chosen when an Entity does not benefit from GameObjects.
+	We usually let Interface represent C# Entities.
 
 ## Components
 
-A Component is a module that handles functionalities of an Entity and groups relevant properties/behaviours together.
-Since a functionality represents a kind of interaction, a Component is also called interaction handler.
-So in order to make a Component meaningful, it must have at least one functionality in hands,
+A Component is a module that handles services of an Entity and groups relevant properties/behaviours together.
+Since a service represents a kind of interaction, a Component is also called interaction handler.
+So in order to make a Component meaningful, it must have at least one service in hands,
 otherwise it can be replaced by one or more Tasks.
+Components can be either encapsulated by Inheritance and/or Interfaces. See <a href="encapsulation">details</a>.
 
 In TECT Components are very helpful to:
 *	represent different concerns of an Entity
-*	group related Templates and Tasks together.
+*	group related properties/behaviours/services together.
 *	reduce the weight of a Entity and other Components.
-*	delegate jobs to smaller pieces.
 *	modularize Entitiies properly.
+
+There are two types of Components:
+1.	MonoBehaviour Components that derive from MonoBehaviours
+	that allow them to directly interact with game worlds(Unity Engine).
+2.	C# Components that derive from System.Object.
+	Such Components are usually contained within MonoBehaviour Components,
+	through which they are allowed to interact with game worlds indirctly.
 
 ## Task
 
-Tasks are concrete implementations of properties/behaviours,
-and they must be contained within other contexts like Entities or Components.
-This means Tasks should always be bound to certain contexts,
+Tasks are concrete implementations of properties/behaviours/services.
+They should always be bound to certain contexts,
 and are only visible to those contexts(parents).
-See <a href="#dynamic_behaviour">details</a>.
 
-<a id="mapping"></a>
-## Mapping from TECT to C\#
-
-To realize all these TECT conceptions,
-we must map them to C# conceptions:
-*	In a composition relationship,
-	parents refer to bigger pieces that contain other pieces,
-	and children refer to smaller pieces that are contained within other pieces.
-	Children might be parents as well.
-*	In a delegatation relationship,
-	parents refer to the higher levels that delegate jobs downward,
-	and children refer to the lower levels that receive the jobs.
-	Children might be parents as well. 
-*	Functionalities are any methods visible to the public.
-	They should be always grouped by Interfaces.
-	*	However, Interfaces for Strategy Pattern are NOT counted as functionalities.
-		Because they are only visible to their parents.
-*	Tempaltes are represented by:
-	1.	Prefabs.
-	2.	Scriptable Objects and their assets/instances.
-	3.	Serializable C# classes that serve as parts of Scriptable Object.
-	4.	External data containers like database.
-*	Entities are represented by:
-	1.	GameObject Entities that are composed of MonoBehvaiour Components.
-		Such Entities are chosen when an object should be actually placed in game world, be visible to users and interact physically with others.
-		We usually use Transform to represent a GameObject Entity,
-		and use GetComponent<Interface> to retrieve the functionalities we are interested in.
-	2.	C# Entities that are composed of C# Components.
-		Such Entities are chosen when an Entity does not benefit from GameObjects.
-		We usually use a single Interface that may be composed of other Interfaces to represent a C# Entity,
-		so we could know all the functionalitites by looking at its Interface composition. See <a href="#interface_segregation">details</a>.
-*	Components are represented by:
-	1.	MonoBehaviour Components that derive from MonoBehaviours
-		that allow them to directly interact with game worlds(Unity Engine).
-		They should be always encapsulated by Unity Engine methods or Interfaces.
-	2.	C# Components that derive from System.Object.
-		Such Components are usually contained within MonoBehaviour Components,
-		through which they are allowed to interact with game worlds indirctly.
-		They should always encapsulalted by Intefaces.
-*	Components are either encapsulated by Interfaces or MonoBehaviours. See <a href="#composition">details</a>.
-*	Tasks are represented by method groups, Strategies, Delegates and so on,
-	and they should be only visible to their parents.
-	(See <a href="#dynamic_task">details</a>.)
+Tasks are actually just code pieces like method groups, Strategies, Delegates and so on. 
+(See <a href="#dynamic_task">details</a>.)
 
 ## Cautions about GameObject/MonoBehaviour/ScriptableObject?
 
@@ -174,26 +149,23 @@ we must map them to C# conceptions:
 ## How to choose the right type of Templates?
 
 Choose Prefabs because:
-*	this is how we deals with the game worlds and the Unity Engine.
-*	they can save Entities directly.
-*	they can save the combinations of Components/Tasks/Templates.
-*	they can be adjusted easily in the inspector,
-	so designers and artists don't have to understand programming in order to manipulate Prefabs.
+*	they visualize GameObject/MonoBehaviour data.
+*	they save Entities directly.
+*	they save the combinations of Components/Tasks/Templates.
+*	they can be adjusted easily in the inspector.
+*	they can be referred by fields/variables in scripts.
 
 Choose ScriptableObjects because:
-*	they are designed to store pre-defined, unique and immutable data.
-*	their assets are stable and independent instances throughout the whole project, which avoids duplicate data and saves memory.
-*	their assets can be adjusted easily in the inspector,
-	so designers and artists don't have to understand programming in order to manipulate SctiptableObject assets.
-*	they can be referred by fields/variables in scritpts.
-*	they are cheaper and lighter than Prefabs.
+*	they visualize System.Object C# class data.
+*	they are "Prefabs" for System.Object C# classes.
+*	their assets are shared accross the whole project, thus avoiding duplicate data and redundant memory usage.
+*	their assets can be adjusted easily in the inspector.
+*	they can be referred by fields/variables in scripts.
 
-Choose external databases because:
+Choose external data assets because:
 *	they store and modify persistent user data on disk.
 *	they restore data from disk next time the app is open.
 *	they are "external" so that players can make their own Mods.
-
-
 
 <a id="gameobject_optimization"></a>
 ## Optimization about Entities and Components
@@ -216,7 +188,7 @@ Here you may see the trade-off behind all these optimizations:
 ## Dynamic Task
 
 To achieve the maximum scalability and flexibility, instead of a fixed sequence of code(Static Task),
-the implementations of properties/behaviours/functionalities in TECT should be defined and chosen dynamically at runtime.
+the implementations of properties/behaviours/services in TECT should be defined and chosen dynamically at runtime.
 
 Normally implementation branches are made with if/switch statements, but as the number increases they become inflexible, hard to read and sometimes cause performance spikes in tight loops.
 Thus, we want to move the conditional checks from execution methods to initilization methods.
@@ -235,14 +207,16 @@ There are several ways to achieve Dynamic Task in TECT, and each of them has its
 2.	Strategy Pattern
 	*	A strategy is a behavioural class encapsulated by an Interface,
 		which can be swapped by other Strategies encapsulated by the same Interface.
+	*	However, Interfaces for Strategy Pattern are NOT counted as services.
+		Because they are only visible to their parents.
 	*	Strategy is used when:
 		*	implementations have their own states.
-		*	implementations can be independent from context and reusable.
+		*	implementations are independent from context and reusable.
 		*	implementations are too complex or too long as Delegates.
 3.	"Owns-a" MonoBehaviour (not suggested)
 	*	This is the basic way that Unity provides us in a compositional manner.
 	*	GameObjects gain different implementations by swapping MonoBehaviours.
-	*	Swapped MonoBehaviours should keep functionalities unchanged.
+	*	Swapped MonoBehaviours should keep services unchanged.
 	*	This could be more expensive and prone to errors than other approaches
 		since any MonoBehaviour can be syntactically replaced with any MonoBehaviour.
 
@@ -264,7 +238,7 @@ This means at least three things:
 3.	Components can be reused across several Entities and Tasks can be reused across several Components.
 
 And...composition is basically a form of delegation.
-In TECT we could achieve composition by simply delegating the implementations of properties/behaviours/functionalities from the root down to the nodes and leaves.
+In TECT we could achieve composition by simply delegating the implementations of properties/behaviours/services from the root down to the nodes and leaves.
 Here is the analog to a tree structure:
 *	Entities are roots that delegate their jobs to other nodes.
 *	Components can be nodes that delegate jobs further down to other nodes.
@@ -273,84 +247,65 @@ Here is the analog to a tree structure:
 *	If the delegation tree has gone too deep (more than 4 layers), 
 	it's time to introduce new Entities to flatten our structures.
 
-In order to achieve such delegation, we would have a heavy use of Abstraction: interface and inheritance.
-Unity by nature delegate all jobs from GameObject Entities to their MonoBehaviour Components.
-Because all scripts attached to GameObject must inherit from MonoBehaviour
-so that implementations of functionalities like Update and OnCollisionEnter are always exposed to GameObject Entities (and Unity Engine).
-This also potentially implies that every MonoBehaviour is a Component with all Unity Engine functionalities,
-and they are not suitable for Dynamic Tasks.
-
-But we do not have to go that deep in order to mimic Unity's MonoBehaviour for C# Entities.
-Since C# allows a class to implement multiple interfaces,
-we could simply map one interface to one or more functionalities,
-and delegate these functionalities/interfaces to Components that contain Tasks implementing those functionalities/interfaces.
-In addition, we could delegate a single functionality to multiple Components if necessary,
-but this need to be desinged carefully as it may lead to unexpected results.
-
 By the way, a C# Entity is also known as parasitic Entity because it must live inside a MonoBehaviour Component of another GameObject Entity.
 As I've said in previous section, in order to interact with the game world we must connnect C# Entities with Unity Engine
 so that C# Entities will get processed, and the most common connectors are MonoBehaviours.
 It is worth it to mention that once a GameObject Entity decides to deal with such parasitic Entities,
-the GameObject Entity must expose new functionalities(Interfaces) to adapt the parasitic Entities.
-I.e. the GameObject Entity creates new Components (encapsulated by Interfaces/Unity Engine) to handle those functionalities of those parasitic Entities.
+the GameObject Entity must expose new services(Interfaces) to adapt the parasitic Entities.
+I.e. the GameObject Entity creates new Components (encapsulated by Interfaces/Unity Engine) to handle those services of those parasitic Entities.
 
 Double Dynamic happens when a Dynamic Task is further split into other Dynamic Tasks,
 which causes the former Dynamic Task losing its purposes.
-This problem is often caused by poor design that makes properties/behaviours/functionalities unclear at first place.
+This problem is often caused by poor design that makes properties/behaviours/services unclear at first place.
 There are two solutions for it:
-1.	Delegate some functionalities to the former Dynamic Task and make it a Component.
+1.	Delegate some services to the former Dynamic Task and make it a Component.
 2.	Flatten the tree structure by delete the former dynamic Task, and move its work to the latter Dynamic Tasks.
 
-<a id="template_pattern"></a>
-## Template and Processing Pattern
+## Data Driven Programming
 
 TECT is following the Data Driven Programming,
-and the basic idea behind it is to select processing patterns dynamically based on inputs(data).
-So far all the concepts (Dynamic Task and Delegation) we have introduced are exactly serving for the same purpose.
+and the basic idea behind it is to select processing patterns dynamically based on inputs.
+So far all the concepts (Template, Dynamic Task and Delegation) we have introduced are exactly serving for the same purpose.
 
 In TECT game players are not the only parties that enter inputs,
-Entities(or its Components) receive data from two sides:
-1.	game designers who build the game worlds by entering data in the Templates.
-	Such inputs will define most of processing patterns in the game worlds.
-2.	game players who interact with the game worlds by entering the hardware instructions.
-	Such inputs usually change the states of Entities, and sometimes help to define the rest of processing patterns.
+Entities also receive predefined data(inputs) from game designers.
+These data may include but not limited to:
+*	Enums that represent finite sets of patterns.
+*	Booleans that represent simple "yes/no" patterns.
+*	Integers that represent "quantity" patterns.
+*	Arrays that represent "existance/absence" patterns.
 
-And this is also why TECT suggests to create Templates first:
-it allows us to define and organize Components/Tasks easily,
-because most of the time we just need to match implementations with Templates.
+<a id="encapsulation"></a>
+## Encapsulation
 
-In addition when we find that a Template is holding too much non-generic data,
-then it's time to extract those non-generic data and make them new Tempaltes and create new Components/Tasks to handle them.
-However one should be carefully when he/she is trying to separate concerns from a Template,
-as this would make old references broken.
-This is generally evitable since it is actually caused by a poor plan/design.
+In TECT services are the public parts of an Entity that others can see and interact with.
+They should be either encapsulated by Inteface and/or Inheritance.
 
-<a id="interface_segregation"></a>
-## Interface Segregation
+Unity Engine prefers inheritance because all scripts attached to GameObject must inherit from MonoBehaviour.
+By so, services like Update, OnCollisionEnter and so on are always exposed to the public(Unity Engine).
+This also potentially implies that every MonoBehaviour is a Component with all Unity Engine services,
+and they are not suitable for Dynamic Tasks.
 
-The whole point of Interfaces is to make clients only dependent on the parts(functioanlities) they are interested in.
+But we do not have to go that deep in order to mimic Unity's MonoBehaviour for C# Entities.
+Since C# allows a class to implement multiple interfaces,
+we could simply map services to interfaces,
+and delegate these services/interfaces to Components that contain Tasks implementing those services/interfaces.
+In addition, we could delegate a single service to multiple Components if necessary,
+but this need to be desinged carefully as it may lead to unexpected results.
 
-But it's never easy to split functionalities into properly sized Interfaces to follow Single Responsibility Principle(SRP) and Interface Segregation Principle(ISP),
-especially when Components should be built on Interfaces.
-It would be too late to split functionalities AFTER we know what clients actually want.
-So we have to make good plans to predict clients' interests:
-1.	Create all Entities conceptually and list their properties/behaviours/functionalities before we create any Component/Task.
-2.	Figure out all potential interactions between all Entities.
-3.	Create one Interface for each kind of interaction.
-4.	Map one or more closely-related Interfaces to each Component.
-5.	For any missed requirements from clients, use Interface inheritance to compose a new one or split into new ones.
-
-For C# Entities, we would create comprehensive Interfaces composed of smaller Interfaces that represent all functionalities an Entity may hold.
-(Although we shouldn't do so for Components).
-The purpose behind the comprehensive Interfaces is to mimic the reflection/Service Locator Pattern 
-that GetComponent<Interface> or similar Unity methods have been utilizing.
+The whole point of encapsulation is to make clients only dependent on the services they are interested in.
+But sometimes we just need all the services without knowing HOW they are implemented.
+Then it is time to introduce a comprehensive Interface that includes all services an Entity may hold.
+The purpose behind the comprehensive Interface is just to mimic the reflection/Service Locator Pattern 
+that GetComponent<> or similar Unity methods have been utilizing.
+In fact, every C# Entity should be encapsulated by such comprehensive Interfaces.
 For example,
 *	StatusManager is a Component that stores and manages all Statuses on its parent character.
 *	Its jobs include processing Statuses as time passes, sending descriptions of Statuses to UI elements and so on.
-*	It has two options to store Statues: concrete classes Status or an Interface IStatus composed of all its functionalities.
-*	At this moment, the StatusManager is exactly the client that needs to know ALL functionalities of the Status class.
-	So we are good to choose IStatus.
-*	When other clients need partial functionalities of the Status class, the StatusManager upcasts IStatus to something like IDescribable and return to them.
+*	It has two options to store Statues: concrete classes Status or an Interface IStatus composed of all its services.
+*	At this moment, the StatusManager is exactly the client that needs to know ALL services of the Status class.
+	So there is nothing wrong to choose IStatus.
+*	When other clients need partial services of the Status class, the StatusManager upcasts IStatus to something like IDescribable and return to them.
 
 ## Other techiniques
 
@@ -451,7 +406,7 @@ so instead we should have a great and comprehensive starting point to avoid cost
 ## Drawbacks of TECT
 
 1.	Deep Abstraction hierarchy
-	*	Composition brings a tree hierarchy for functionalities.
+	*	Composition brings a tree hierarchy for Entities.
 	*	Dynamic Tasks break things into even smaller pieces.
 	*	We need a clear diagram representing the hierarchy to avoid confusion.
 2.	Worse performance than Data Oriented Design with ECS
@@ -526,6 +481,14 @@ Suffix:
 *	Observer: an object that listens on an event that a Subject fires.
 *	C# class: a class that does not inherits from Unity Engine classes.
 *	Unity Engine class: a class that inherits from Unity Engine classes.
+*	In a composition relationship,
+	parents refer to bigger pieces that contain other pieces,
+	and children refer to smaller pieces that are contained within other pieces.
+	Children might be parents as well.
+*	In a delegatation relationship,
+	parents refer to the higher levels that delegate jobs downward,
+	and children refer to the lower levels that receive the jobs.
+	Children might be parents as well. 
 
 ## Thanks to techniques
 

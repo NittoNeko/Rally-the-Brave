@@ -4,10 +4,8 @@ using UnityEngine;
 
 public enum ESkillMoveType
 {
-    // move towards mouse pointer
+    // move based on mouse pointer directly
     Direct,
     // move towards nearby enemy
-    Homing,
-    // move towards
-    DirectHoming
+    Homing
 }

@@ -9,11 +9,10 @@ public class SkillProjectileTpl
     // 0 means it will never move
     [SerializeField, MinValue(0)]
     private float speed;
-    // 0 means it will always pierce 
-    [SerializeField, MinValue(0)]
-    private int pierceCount;
+    // 0 means it will always pierce
+
     [SerializeField]
-    private bool isHoming;
+    private ESkillMoveType moveType;
     [SerializeField]
-    private CombatResourceEffectTpl[] combatResourceEffects;
+    private CombatResourceEffectTpl[] effectOnCollision;
 }

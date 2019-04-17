@@ -80,4 +80,3 @@ Cause:
 
 Conclusion:
 *	I prefer Foreach as it ensures the collection is not modifiable.
-

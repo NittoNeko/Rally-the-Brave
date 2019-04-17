@@ -223,6 +223,7 @@
     <Compile Include="Assets\Scripts\Mob\MBMobShootAndMove.cs" />
     <Compile Include="Assets\Scripts\Skill\ESkillMoveType.cs" />
     <Compile Include="Assets\Scripts\Skill\MBProjectileMgr.cs" />
+    <Compile Include="Assets\Scripts\Skill\MBSkillCollisionMovement.cs" />
     <Compile Include="Assets\Scripts\Skill\MBSkillProjectile.cs" />
     <Compile Include="Assets\Scripts\Skill\Skill.cs" />
     <Compile Include="Assets\Scripts\Skill\SkillAreaTpl.cs" />

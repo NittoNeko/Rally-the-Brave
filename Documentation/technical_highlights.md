@@ -7,7 +7,7 @@ Entity Component System(ECS), Interface-based Programming and Component-based Ar
 I spent several months on learning from those techniques,
 taking their benefits into my design,
 and experimenting with my personal project, Rally the Brave,
-and finally discovered an architecture called Template Entity Component Task Task(TECT).
+and finally discovered an architecture called Template Entity Component Task(TECT).
 
 ## What is the truth(history) behind TECT?
 
@@ -15,7 +15,7 @@ It is really hard to find a proper architecture.
 Sometimes I wish I could get rid of all Inheritance and Interfaces 
 so that the whole structure of projects is simplified.
 Rest of the time, I think it is so good to let everything implement Interfaces or base abstract classes,
-in order to achieve the highest scalability and the lowest decoupling.
+in order to achieve the highest scalability and the lowest coupling.
 
 So, guess what? The former is kind of "lazy" programming,
 and in later development when you try to modify/fix/add contents it is just painful.

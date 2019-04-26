@@ -7,7 +7,8 @@ public enum ECombaterFaction
     Citizen, TheBrave, DungeonCitizen, TheDark
 }
 
-// This should be improved later
+// this should be improved later
+// one always see him/herself as ally
 public static class ECombaterFactionExtention
 {
     public static ECombaterRelationship GetRelationship(this ECombaterFaction self, ECombaterFaction other)
@@ -22,7 +23,7 @@ public static class ECombaterFactionExtention
                     case ECombaterFaction.TheBrave:
                         return ECombaterRelationship.Ally;
                     case ECombaterFaction.DungeonCitizen:
-                        return ECombaterRelationship.Neutral;
+                        return ECombaterRelationship.Enemy;
                     case ECombaterFaction.TheDark:
                         return ECombaterRelationship.Enemy;
                 }
@@ -35,7 +36,7 @@ public static class ECombaterFactionExtention
                     case ECombaterFaction.TheBrave:
                         return ECombaterRelationship.Ally;
                     case ECombaterFaction.DungeonCitizen:
-                        return ECombaterRelationship.Neutral;
+                        return ECombaterRelationship.Enemy;
                     case ECombaterFaction.TheDark:
                         return ECombaterRelationship.Enemy;
                 }
@@ -44,13 +45,13 @@ public static class ECombaterFactionExtention
                 switch (other)
                 {
                     case ECombaterFaction.Citizen:
-                        return ECombaterRelationship.Neutral;
+                        return ECombaterRelationship.Enemy;
                     case ECombaterFaction.TheBrave:
-                        return ECombaterRelationship.Neutral;
+                        return ECombaterRelationship.Enemy;
                     case ECombaterFaction.DungeonCitizen:
-                        return ECombaterRelationship.Neutral;
+                        return ECombaterRelationship.Ally;
                     case ECombaterFaction.TheDark:
-                        return ECombaterRelationship.Neutral;
+                        return ECombaterRelationship.Enemy;
                 }
                 break;
             case ECombaterFaction.TheDark:
@@ -61,13 +62,13 @@ public static class ECombaterFactionExtention
                     case ECombaterFaction.TheBrave:
                         return ECombaterRelationship.Enemy;
                     case ECombaterFaction.DungeonCitizen:
-                        return ECombaterRelationship.Neutral;
+                        return ECombaterRelationship.Enemy;
                     case ECombaterFaction.TheDark:
                         return ECombaterRelationship.Ally;
                 }
                 break;
         }
-        return ECombaterRelationship.Neutral;
+        return ECombaterRelationship.Enemy;
     }
 
 

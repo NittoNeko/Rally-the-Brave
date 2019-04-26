@@ -4,7 +4,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 
 [System.Serializable]
-public class CombatResourceEffectTpl : MonoBehaviour
+public class CombatResourceEffectTpl
 {
     [SerializeField]
     private ECombatResourceEffectType type;

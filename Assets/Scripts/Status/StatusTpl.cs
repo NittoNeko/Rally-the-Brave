@@ -23,7 +23,7 @@ public class StatusTpl
     [SerializeField]
     private PeriodicCombatResourceEffectTpl[] combatPeriodEffects;
     [SerializeField]
-    private ESpecialEffectType[] specialStatuses;
+    private ESpecialStatusType[] specialStatuses;
 
     public string Description => description;
 
@@ -41,7 +41,7 @@ public class StatusTpl
 
     public AttrModifierTpl[] AttrModifiers => attrModifiers;
 
-    public ESpecialEffectType[] SpecialStatuses => specialStatuses;
+    public ESpecialStatusType[] SpecialStatuses => specialStatuses;
 
     public PeriodicCombatResourceEffectTpl[] CombatPeriodEffects => combatPeriodEffects;
 }

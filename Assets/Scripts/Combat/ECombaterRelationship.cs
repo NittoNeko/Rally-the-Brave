@@ -4,5 +4,5 @@ using UnityEngine;
 
 public enum ECombaterRelationship
 {
-    Neutral, Ally, Enemy
+    Ally, Enemy
 }

@@ -7,13 +7,18 @@ public static class EnumArray
     public static EAttrType[] AttrType { get; }
         = System.Enum.GetValues(typeof(EAttrType)) as EAttrType[];
 
-    public static string[] AttrName { get; }
+    public static string[] AttrTypeName { get; }
         = System.Enum.GetNames(typeof(EAttrType));
 
-    public static EAttrModifierLayer[] AttrModLayer { get; }
+    public static EAttrModifierLayer[] AttrModifierLayer { get; }
         = System.Enum.GetValues(typeof(EAttrModifierLayer)) as EAttrModifierLayer[];
 
-    public static ESpecialEffectType[] SpecialStatusType { get; }
-    = System.Enum.GetValues(typeof(ESpecialEffectType)) as ESpecialEffectType[];
+    public static ESpecialStatusType[] SpecialStatusType { get; }
+    = System.Enum.GetValues(typeof(ESpecialStatusType)) as ESpecialStatusType[];
 
+    public static ECombaterRelationship[] CombatererRelationship { get; }
+    = System.Enum.GetValues(typeof(ECombaterRelationship)) as ECombaterRelationship[];
+
+    public static string[] CombatererRelationshipName { get; }
+        = System.Enum.GetNames(typeof(ECombaterRelationship));
 }

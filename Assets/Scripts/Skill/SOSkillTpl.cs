@@ -6,5 +6,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SkillPreset", menuName = "ScriptableObject/SkillPreset")]
 public class SOSkillTpl : ScriptableObject
 {
-
+    [SerializeField, HideLabel]
+    private SkillTpl skillTpl;
 }

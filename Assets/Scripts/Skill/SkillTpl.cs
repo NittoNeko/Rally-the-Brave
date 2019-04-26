@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using UnityEngine;
 
 [System.Serializable]
@@ -15,11 +17,11 @@ public class SkillTpl
     [SerializeField]
     private CombatResourceEffectTpl[] directEffects;
     [SerializeField]
-    private GameObject[] Collisions;
+    private SkillCollisionTpl[] Collisions;
 
     public string Description { get => description; }
     public float Cooldown { get => cooldown; }
     public float ManaCost { get => manaCost;}
     public CombatResourceEffectTpl[] DirectEffects { get => directEffects; }
-    public GameObject[] Collisions1 { get => Collisions;}
+    public SkillCollisionTpl[] Collisions1 { get => Collisions;}
 }

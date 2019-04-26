@@ -26,7 +26,7 @@ public class SOAttrPresetTpl : ScriptableObject
 
         for (int i = 0; i < temp.Length; ++i)
         {
-            temp[i] = new AttrTplWrapper(EnumArray.AttrName[i]);
+            temp[i] = new AttrTplWrapper(EnumArray.AttrTypeName[i]);
         }
 
         return temp;

@@ -22,7 +22,7 @@ public class Attribute : IAttribute
     public Attribute(AttrPresetTpl preset, bool isCalculationInversed)
     {
         isModDirty = true;
-        modifiers = new float[EnumArray.AttrModLayer.Length];
+        modifiers = new float[EnumArray.AttrModifierLayer.Length];
         independents = new List<float>(indSize);
 
         this.preset = preset;

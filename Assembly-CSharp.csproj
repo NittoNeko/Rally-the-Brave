@@ -222,11 +222,16 @@
     <Compile Include="Assets\Scripts\Gear\Gear.cs" />
     <Compile Include="Assets\Scripts\Mob\MBMobShootAndMove.cs" />
     <Compile Include="Assets\Scripts\Skill\ESkillMoveType.cs" />
+    <Compile Include="Assets\Scripts\Skill\ISkill.cs" />
     <Compile Include="Assets\Scripts\Skill\MBProjectileMgr.cs" />
-    <Compile Include="Assets\Scripts\Skill\MBSkillCollisionMovement.cs" />
     <Compile Include="Assets\Scripts\Skill\MBSkillProjectile.cs" />
     <Compile Include="Assets\Scripts\Skill\Skill.cs" />
     <Compile Include="Assets\Scripts\Skill\SkillAreaTpl.cs" />
+    <Compile Include="Assets\Scripts\Skill\SkillCollision\ISkillCollisionCombatInfo.cs" />
+    <Compile Include="Assets\Scripts\Skill\SkillCollision\ISkillCollisionPointer.cs" />
+    <Compile Include="Assets\Scripts\Skill\SkillCollision\MBSkillCollisionDirectMovement.cs" />
+    <Compile Include="Assets\Scripts\Skill\SkillCollision\MBSkillCollisionHoming.cs" />
+    <Compile Include="Assets\Scripts\Skill\SkillCollision\SkillCollisionTpl.cs" />
     <Compile Include="Assets\Scripts\Skill\SkillProjectileTpl.cs" />
     <Compile Include="Assets\Scripts\Skill\SkillTpl.cs" />
     <Compile Include="Assets\Scripts\Skill\SOSkillProjectileTpl.cs" />
@@ -234,7 +239,7 @@
     <Compile Include="Assets\Scripts\Status\AttrModifierEffect\AttrModifierEffect.cs" />
     <Compile Include="Assets\Scripts\Status\CombatPeriodEffect\PeriodicCombatResourceEffect.cs" />
     <Compile Include="Assets\Scripts\Status\CombatPeriodEffect\PeriodicCombatResourceEffectTpl.cs" />
-    <Compile Include="Assets\Scripts\Status\ESpecialEffectType.cs" />
+    <Compile Include="Assets\Scripts\Status\ESpecialStatusType.cs" />
     <Compile Include="Assets\Scripts\Status\EStatusType.cs" />
     <Compile Include="Assets\Scripts\Status\FStatus.cs" />
     <Compile Include="Assets\Scripts\Status\IStatus.cs" />
@@ -247,6 +252,7 @@
     <Compile Include="Assets\Scripts\Utility\EnumComparer.cs" />
     <Compile Include="Assets\Scripts\Utility\Reporter.cs" />
     <Compile Include="Assets\Scripts\Utility\RNG.cs" />
+    <Compile Include="Assets\Tests\B.cs" />
     <Compile Include="Assets\Tests\Child.cs" />
     <Compile Include="Assets\Tests\ITest.cs" />
     <Compile Include="Assets\Tests\Parent.cs" />

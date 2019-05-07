@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface ISkillCollisionCombatInfo
 {
-    void SetCombatInfo(ECombaterFaction casterFaction, ECombaterRelationship targetRelationship, IAttrHolder casterAttr);
+    void SetCombatInfo(ECombaterFaction casterFaction, IAttrHolder casterAttr);
 }

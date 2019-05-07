@@ -14,7 +14,6 @@ public class MBMobShootAndMove : MonoBehaviour
     private CircleCollider2D serachArea;
     private IFactionHolder self;
     private PolyNav.PolyNavAgent agent;
-    private SpriteRenderer renderer;
     private float counter;
     private Transform target;
     private bool isAttacking;
@@ -23,7 +22,6 @@ public class MBMobShootAndMove : MonoBehaviour
     {
         self = GetComponent<IFactionHolder>();
         agent = GetComponent<PolyNav.PolyNavAgent>();
-        renderer = GetComponent<SpriteRenderer>();
 
         Reporter.ComponentMissingCheck(self);
         Reporter.ComponentMissingCheck(agent);
@@ -70,7 +68,7 @@ public class MBMobShootAndMove : MonoBehaviour
 
         if (other != null)
         {
-            if (other.Faction.GetRelationship(self.Faction) == ECombaterRelationship.Enemy)
+            if (other.Faction != self.Faction)
             {
                 agent.SetDestination(collision.transform.position);
                 target = collision.transform;

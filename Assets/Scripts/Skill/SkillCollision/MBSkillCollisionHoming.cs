@@ -12,7 +12,6 @@ public class MBSkillCollisionHoming : MonoBehaviour, ISkillCollisionCombatInfo
 
     private Rigidbody2D rigid;
 
-    private ECombaterRelationship targetRelationship;
     private ECombaterFaction casterFaction;
 
     private void Awake()
@@ -33,9 +32,8 @@ public class MBSkillCollisionHoming : MonoBehaviour, ISkillCollisionCombatInfo
         Gizmos.DrawSphere(transform.position, searchRadius);
     }
 
-    public void SetCombatInfo(ECombaterFaction casterFaction, ECombaterRelationship targetRelationship, IAttrHolder casterAttr)
+    public void SetCombatInfo(ECombaterFaction casterFaction, IAttrHolder casterAttr)
     {
         this.casterFaction = casterFaction;
-        this.targetRelationship = targetRelationship;
     }
 }

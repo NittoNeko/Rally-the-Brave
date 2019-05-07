@@ -34,7 +34,7 @@ public class MBProjectileMgr : MonoBehaviour, IFactionHolder
         IFactionHolder holder = collision.transform.GetComponent<IFactionHolder>();
 
         // destroy self on enemy/neutral or on obstacles
-        if (holder == null || holder.Faction.GetRelationship(faction) != ECombaterRelationship.Ally)
+        if (holder == null || holder.Faction != this.faction)
         {
             Destroy(gameObject);
         }

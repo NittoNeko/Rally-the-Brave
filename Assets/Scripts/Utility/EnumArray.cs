@@ -15,10 +15,4 @@ public static class EnumArray
 
     public static ESpecialStatusType[] SpecialStatusType { get; }
     = System.Enum.GetValues(typeof(ESpecialStatusType)) as ESpecialStatusType[];
-
-    public static ECombaterRelationship[] CombatererRelationship { get; }
-    = System.Enum.GetValues(typeof(ECombaterRelationship)) as ECombaterRelationship[];
-
-    public static string[] CombatererRelationshipName { get; }
-        = System.Enum.GetNames(typeof(ECombaterRelationship));
 }
